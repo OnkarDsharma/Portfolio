@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import SakuraEditorialPoster from "@/components/ui/sakura-editorial-poster";
 import { AnimatedFolder } from "@/components/ui/3d-folder";
@@ -149,6 +149,49 @@ const folderData = [
   },
 ];
 
+type GitHubDay = {
+  date: string;
+  level: number;
+};
+
+type GitHubContributionResponse = {
+  total: number;
+  cells: GitHubDay[];
+};
+
+const weekdayLabels = ["Mon", "Wed", "Fri"];
+
+function buildContributionGrid(cells: GitHubDay[]) {
+  const grid = Array.from({ length: 7 }, () => Array.from({ length: 56 }, () => 0));
+
+  cells.forEach(({ level }, index) => {
+    const row = index % 7;
+    const col = Math.floor(index / 7);
+    if (row < 7 && col < 56) {
+      grid[row][col] = level;
+    }
+  });
+
+  const monthLabels: { label: string; col: number }[] = [];
+  const seenMonths = new Set<string>();
+
+  cells.forEach(({ date }, index) => {
+    const parsed = new Date(date);
+    const monthKey = `${parsed.getFullYear()}-${parsed.getMonth()}`;
+    const col = Math.floor(index / 7);
+
+    if (!seenMonths.has(monthKey)) {
+      seenMonths.add(monthKey);
+      monthLabels.push({
+        label: new Intl.DateTimeFormat("en-US", { month: "short" }).format(parsed).toLowerCase(),
+        col,
+      });
+    }
+  });
+
+  return { grid, monthLabels };
+}
+
 type SelectedFile = {
   folderTitle: string;
   project: (typeof folderData)[number]["projects"][number];
@@ -156,6 +199,21 @@ type SelectedFile = {
 
 export default function Home() {
   const [selectedFile, setSelectedFile] = useState<SelectedFile>(null);
+  const [githubStats, setGithubStats] = useState<GitHubContributionResponse | null>(null);
+
+  useEffect(() => {
+    fetch("/api/github-contributions")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch GitHub contributions");
+        return res.json() as Promise<GitHubContributionResponse>;
+      })
+      .then((data) => setGithubStats(data))
+      .catch(() => {
+        setGithubStats({ total: 0, cells: [] });
+      });
+  }, []);
+
+  const contributionData = githubStats ? buildContributionGrid(githubStats.cells) : { grid: Array.from({ length: 7 }, () => Array.from({ length: 56 }, () => 0)), monthLabels: [] };
 
   const handleSelectProject = (
     project: (typeof folderData)[number]["projects"][number],
@@ -183,7 +241,7 @@ export default function Home() {
         className="w-full"
       />
 
-      <section className="relative overflow-hidden border-x border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-24 md:py-32">
+      <section className="relative overflow-hidden border-x border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-24 md:py-32 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
         <div className="absolute inset-x-0 top-0 h-px bg-black/10" />
         <div className="absolute inset-x-0 bottom-0 h-px bg-black/10" />
         <div className="mx-auto max-w-7xl px-6">
@@ -300,6 +358,90 @@ export default function Home() {
                   </ul>
                 </div>
               ) : null}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden border-x border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-20 md:py-24 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="relative pl-4 md:pl-6">
+            <p className="text-[2.3rem] font-semibold tracking-[-0.06em] text-[#111827] md:text-[4rem]">
+              github contributions
+            </p>
+          </div>
+
+          <div className="relative mt-10 overflow-hidden rounded-[1.8rem] border border-white/10 bg-[#0d1117] p-4 text-white shadow-[0_24px_60px_rgba(2,6,23,0.45)] md:p-6">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <p className="text-[1.1rem] font-medium text-white/90 md:text-[1.7rem]">
+                {githubStats ? `${githubStats.total.toLocaleString()} contributions in the last year` : "Loading contributions..."}
+              </p>
+              <button className="rounded-md border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/80 transition hover:bg-white/10">
+                Contribution settings ▾
+              </button>
+            </div>
+
+            <div className="flex items-start gap-2 pb-3 pl-3 text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 md:gap-4">
+              <div className="w-8 shrink-0" />
+              <div className="grid flex-1 grid-cols-12 gap-1.5 md:gap-2">
+                {contributionData.monthLabels.map((month) => (
+                  <span key={`${month.label}-${month.col}`} className="text-center" style={{ gridColumnStart: month.col + 1 }}>
+                    {month.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex gap-3 overflow-x-auto pb-2">
+              <div className="flex flex-col gap-1 pt-1 text-[10px] font-medium text-white/45">
+                {weekdayLabels.map((day) => (
+                  <span key={day} className="h-4 leading-4">
+                    {day}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex-1 overflow-hidden rounded-xl border border-white/5 bg-white/2 px-2 py-2">
+                <div className="grid" style={{ gridTemplateColumns: `repeat(${contributionData.grid[0].length}, minmax(0, 1fr))`, gap: "4px" }}>
+                  {contributionData.grid.map((row, rowIndex) =>
+                    row.map((level, colIndex) => {
+                      const colors = [
+                        "#161b22",
+                        "#0e4429",
+                        "#006d32",
+                        "#26a641",
+                        "#39d353",
+                      ];
+
+                      return (
+                        <div
+                          key={`${rowIndex}-${colIndex}`}
+                          className="h-3.5 w-3.5 rounded-[2px] md:h-4 md:w-4"
+                          style={{ backgroundColor: colors[level] ?? colors[0] }}
+                          title={level > 0 ? `${level} contributions` : "No contributions"}
+                        />
+                      );
+                    }),
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 flex items-center justify-between gap-3 text-[11px] text-white/55 md:text-[12px]">
+              <span>Learn how we count contributions</span>
+              <div className="flex items-center gap-2">
+                <span className="text-white/60">Less</span>
+                <div className="flex items-center gap-1">
+                  {[0, 1, 2, 3, 4].map((level) => (
+                    <span
+                      key={level}
+                      className="h-2.5 w-2.5 rounded-sm border border-white/10"
+                      style={{ backgroundColor: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"][level] }}
+                    />
+                  ))}
+                </div>
+                <span className="text-white/60">More</span>
+              </div>
             </div>
           </div>
         </div>

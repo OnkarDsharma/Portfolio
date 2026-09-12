@@ -517,7 +517,7 @@ export function SakuraEditorialPoster({
     <section
       ref={trackRef}
       className={cn(
-        "relative isolate w-full bg-[#ece8df]",
+        "relative isolate w-full bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px]",
         fillViewport && "h-screen",
         className,
       )}

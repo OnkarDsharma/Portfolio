@@ -183,12 +183,12 @@ export default function Home() {
         className="w-full"
       />
 
-      <section className="relative overflow-hidden bg-[linear-gradient(180deg,#efe7dc_0%,#ede3d6_38%,#f7f4ee_100%)] pb-20 pt-6">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] opacity-70" />
+      <section className="relative overflow-hidden border-x border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-24 md:py-32">
         <div className="absolute inset-x-0 top-0 h-px bg-black/10" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-black/10" />
         <div className="mx-auto max-w-7xl px-6">
-          <div className="mx-auto max-w-3xl border-x border-black/10 px-6 py-14 md:px-10 md:py-16">
-            <div className="mx-auto max-w-2xl rounded-[2rem] border border-[#d8b48b]/70 bg-[linear-gradient(180deg,rgba(255,252,248,0.95)_0%,rgba(251,247,241,0.95)_100%)] p-7 shadow-[0_20px_60px_rgba(60,40,20,0.08)] md:p-10">
+          <div className="-mt-24 mb-16 flex items-start justify-between gap-8">
+            <div className="ml-[clamp(0rem,4vw,3rem)] mt-8 max-w-[min(100%,34rem)] rounded-[2rem] border border-[#d8b48b]/70 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] p-7 shadow-[0_20px_60px_rgba(60,40,20,0.08)] md:p-10">
               <p className="font-['Cormorant_Garamond'] text-4xl leading-none text-[#cf7a2a] md:text-5xl">
                 tldr;
               </p>
@@ -204,14 +204,25 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            </div>
-        </div>
-      </section>
 
-      <section className="relative overflow-hidden border-x border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-24 md:py-32">
-        <div className="absolute inset-x-0 top-0 h-px bg-black/10" />
-        <div className="absolute inset-x-0 bottom-0 h-px bg-black/10" />
-        <div className="mx-auto max-w-7xl px-6">
+            <div className="mr-[clamp(0rem,4vw,3rem)] hidden shrink-0 self-start md:mt-10 md:block lg:mt-14">
+              <div className="rounded-full border border-[#d8b48b]/80 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] p-2 shadow-[0_20px_60px_rgba(60,40,20,0.08)]">
+                <div
+                  className="relative h-32 w-32 overflow-hidden rounded-full border border-white/80 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.92),rgba(246,219,199,0.88)_48%,rgba(215,143,108,0.92))] md:h-40 md:w-40"
+                  style={{
+                    backgroundImage: "url('/photo.jpeg')",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                  aria-label="Onkareshwar Sharma portrait frame"
+                >
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04)_0%,rgba(0,0,0,0.06)_100%)]" />
+                  <span className="sr-only">Onkareshwar Sharma</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="mx-auto max-w-2xl">
             <p className="text-xs font-medium uppercase tracking-[0.35em] text-black/45">
               Selected archive

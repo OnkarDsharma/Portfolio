@@ -36,36 +36,28 @@ const folderData = [
       {
         id: "osc-1",
         image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
-        title: "GrowthBook REST API",
+        title: "GrowthBook Rest API Endpoint",
         summary: "Built a public REST endpoint for posting comments to experiments programmatically.",
         details:
-          "Engineered a public REST API endpoint at POST /experiments/:id/comment for GrowthBook, enabling programmatic comment posting while reusing the existing backend logic for permission checks, data models, and validation.",
-        highlights: [
-          "Enabled structured feedback from automation and internal tools.",
-          "Kept permission checks and validation aligned with the backend.",
-          "Exposed a documented API surface for contributor workflows.",
-        ],
+          "I contributed to GrowthBook by building a public REST API endpoint (POST /experiments/:id/comment) that allows users to add comments to experiments programmatically. Instead of duplicating existing logic, I connected the endpoint to GrowthBook’s internal discussion system, so it automatically follows the same permission checks and validation rules already used by the UI. I also tested the endpoint end-to-end across different edge cases, which helped close feature #6478. As part of the contribution, I updated the OpenAPI specification as well, making the API easier to extend for future MCP server integration.",
+        highlights: [],
         tags: ["REST API", "Backend", "GrowthBook"],
       },
       {
         id: "osc-2",
         image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
-        title: "Saved Groups Pagination",
+        title: "GrowthBook Pagination Fix",
         summary: "Fixed a client-side pagination issue so search filters stayed in sync across pages.",
         details:
-          "Resolved a client-side pagination bug within the Saved Groups interface by synchronizing search filters with pagination state, restoring accurate data retrieval and search functionality across multi-page datasets.",
-        highlights: [
-          "Prevented stale results during pagination.",
-          "Restored accurate search behavior for large datasets.",
-          "Improved the workflow for grouped records and filters.",
-        ],
+          "I resolved a client-side pagination bug in the Saved Groups feature where search queries executed on subsequent pages failed to display valid results. By diagnosing the issue as a stale pagination offset applied to a dynamically filtered data array, I implemented a state reset within the search handler to ensure the data sliced correctly on every keystroke. After conducting thorough local testing to verify edge cases, including sorting interactions and enterprise feature flags, this fix successfully closed bug #6889 and restored seamless search functionality to the UI.",
+        highlights: [],
         tags: ["Pagination", "Search", "Frontend"],
       },
       {
         id: "osc-3",
         image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&q=80",
-        title: "Maintainer Collaboration",
-        summary: "Modernized low-level C/C++ type declarations while collaborating through review and issues.",
+        title: "Tenstorrent",
+        summary: "Modernized low-level C/C++ type declarations in the tt-metal repo of Tenstorrent while collaborating through review and issues.",
         details:
           "Merged a contribution modernizing kernel-level C/C++ type declarations across Quasar and Wormhole components, while collaborating with maintainers through issue discussions and code review to keep the change aligned with upstream expectations.",
         highlights: [
@@ -80,33 +72,27 @@ const folderData = [
   {
     title: "Projects",
     projects: [
+      
       {
         id: "proj-1",
-        image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=800&q=80",
-        title: "CSC Sarthi",
-        summary: "An AI-powered pre-submission assistant for 30+ government services with validation and OCR.",
+        image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&q=80",
+        title: "Website Security Scanner API",
+        summary: "A production-ready REST API that scans any website across 10 parallel security checks, including HTTP headers, TLS/SSL, SPF/DMARC, CORS, cookie security, exposed files, and CMS detection, and returns a scored JSON security report.",
         details:
-          "Architected an AI-powered pre-submission validation platform for 30+ government services, performing real-time form validation and rejection-risk prediction. The system combined a machine learning risk engine, OCR-based document verification, and a WhatsApp chatbot workflow with a Django analytics dashboard.",
-        highlights: [
-          "Reached around 87% validation accuracy with field-level explainability.",
-          "Detected 3+ mismatch types by cross-validating documents against form inputs.",
-          "Visualized the top 5 rejection causes across 30+ districts.",
-        ],
-        tags: ["Python", "Django", "Scikit-learn", "OCR"],
+          "I built the system with security and reliability in mind, adding SSRF protection, private IP and cloud metadata blocking, per-IP rate limiting, and accurate failure handling to avoid misleading scan results. The API was published on RapidAPI with tiered pricing and has grown to 265+ users, turning a technical security tool into a real-world product. I also built a public web demo that lets non-technical users run scans directly from their browser, creating a simple funnel into the API.",
+        liveUrl: "https://website-security-scanner-api.vercel.app/",
+        highlights: [],
+        tags: ["Node.js", "Vercel", "REST API", "DNS/TLS"],
       },
       {
         id: "proj-2",
-        image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&q=80",
-        title: "Website Security Scanner API",
-        summary: "A REST API that ran 10 parallel security checks and returned a scored JSON risk report.",
+        image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=800&q=80",
+        title: "CSC Sarthi",
+        summary: "An AI-powered pre-submission platform built to help citizens and CSC operators catch errors before submitting applications across 30+ government services.",
         details:
-          "Programmed and shipped a REST API running 10 parallel security checks, including HTTP security headers, TLS/SSL certificate validation, DNS-based email spoofing checks, CORS misconfiguration, cookie security, exposed credential files, CMS fingerprinting, and more. The service returned a scored JSON risk report and was later published on RapidAPI.",
-        highlights: [
-          "Reached 264+ users after publishing on RapidAPI.",
-          "Added SSRF protections, per-IP rate limiting, and honest failure reporting.",
-          "Launched a public web demo for in-browser scans without an API key.",
-        ],
-        tags: ["Node.js", "Vercel", "REST API", "DNS/TLS"],
+          "I developed the ML-based rejection-risk engine, achieving ~87% validation accuracy, along with field-level explanations to help users understand potential issues. I also built an OCR document verification pipeline that extracts Name, ID, and DOB and cross-checks them against form data to detect document mismatches. The platform also includes a WhatsApp pre-verification workflow and an analytics dashboard tracking rejection patterns across 30+ districts. The project was selected by the Chhattisgarh Government as a winning solution at E-Summit’26, where our team won the AIML category hackathon. This gave the project validation beyond a prototype and demonstrated its potential for solving a real government-service workflow problem.",
+        highlights: [],
+        tags: ["Python", "Django", "Scikit-learn", "OCR"],
       },
       {
         id: "proj-3",
@@ -252,6 +238,29 @@ export default function Home() {
 
   const contributionData = githubStats ? buildContributionGrid(githubStats.cells) : { grid: Array.from({ length: 7 }, () => Array.from({ length: 56 }, () => 0)), monthLabels: [] };
 
+  const formatProjectDetails = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+
+    return parts.map((part, index) => {
+      if (part.match(/^https?:\/\//)) {
+        return (
+          <a
+            key={`${part}-${index}`}
+            href={part}
+            target="_blank"
+            rel="noreferrer"
+            className="text-[#8c5a2d] underline decoration-[#8c5a2d]/60 underline-offset-4 transition hover:text-[#6a431e]"
+          >
+            {part}
+          </a>
+        );
+      }
+
+      return <span key={`${part}-${index}`}>{part}</span>;
+    });
+  };
+
   const handleSelectProject = (
     project: (typeof folderData)[number]["projects"][number],
     folderTitle: string,
@@ -266,9 +275,8 @@ export default function Home() {
     <main className="min-h-screen">
       <SakuraEditorialPoster
         title="ONKARESHWAR SHARMA"
-        headline="Crafting Digital Experiences | Building the Future"
+        headline="heya, i'm onkareshwar"
         body="Passionate developer creating innovative solutions that bridge design and technology. Every pixel tells a story, every line of code shapes an experience."
-        subheadline="Welcome to my portfolio. Let's create something extraordinary."
         footerLeft="Onkareshwar Sharma"
         footerCenter="Portfolio"
         footerRight="2026"
@@ -278,7 +286,7 @@ export default function Home() {
         className="w-full"
       />
 
-      <section className="relative overflow-hidden border-x border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-24 md:py-32 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
+      <section className="relative mx-4 my-6 overflow-hidden rounded-[2rem] border border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-24 md:mx-8 md:py-32 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
         <div className="absolute inset-x-0 top-0 h-px bg-black/10" />
         <div className="absolute inset-x-0 bottom-0 h-px bg-black/10" />
         <div className="mx-auto max-w-7xl px-6">
@@ -289,13 +297,17 @@ export default function Home() {
               </p>
               <div className="mt-6 space-y-6 text-[1.05rem] leading-8 text-slate-600 md:text-[1.1rem]">
                 <p>
-                  i&apos;m obsessed with ideas, especially the ones that turn into products and keep evolving after the first draft.
+                  i&apos;m obsessed with shipping features, applications which people actually use.
                 </p>
                 <p>
-                  i build across web, backend, and systems work. from AI-assisted validation tools to security scanners and micro-subscription gateways, i like shipping things that are useful, measurable, and a little sharper than average.
+                  i love doing contributions across YC startups, global AI startups helping them ship new features or fix thier core bugs,
+                  i recently shipped a website security scanner API with tier based subscription and scaled it to 264+ users in just 2 weeks.
                 </p>
                 <p>
-                  i adapt fast. tools change, but the focus stays on clean execution, strong logic, and work that holds up under review.
+                  i especialize across backend, web and systems work.
+                </p>
+                <p>
+                  I work with the intention of shipping.
                 </p>
               </div>
             </div>
@@ -366,16 +378,29 @@ export default function Home() {
             >
               {selectedFile ? (
                 <div className="flex flex-col gap-5 p-6 md:p-8 lg:p-10">
-                  <div>
-                    <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
-                      {selectedFile.folderTitle}
-                    </p>
-                    <h3 className="mt-2 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
-                      {selectedFile.project.title}
-                    </h3>
-                    <p className="mt-3 text-sm leading-6 text-muted-foreground md:text-base">
-                      {selectedFile.project.summary}
-                    </p>
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                        {selectedFile.folderTitle}
+                      </p>
+                      <h3 className="mt-2 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
+                        {selectedFile.project.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-6 text-muted-foreground md:text-base">
+                        {selectedFile.project.summary}
+                      </p>
+                    </div>
+
+                    {selectedFile.project.liveUrl ? (
+                      <a
+                        href={selectedFile.project.liveUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex shrink-0 items-center justify-center rounded-full border border-[#c98d52]/80 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] px-4 py-2 text-[10px] font-medium uppercase tracking-[0.22em] text-[#1f1a17] transition hover:brightness-105"
+                      >
+                        Live
+                      </a>
+                    ) : null}
                   </div>
 
                   <div className="flex flex-wrap gap-2">
@@ -391,18 +416,10 @@ export default function Home() {
 
                   <div className="rounded-2xl border border-border bg-background/75 p-5">
                     <p className="text-sm leading-7 text-foreground/85 md:text-[0.98rem]">
-                      {selectedFile.project.details}
+                      {formatProjectDetails(selectedFile.project.details)}
                     </p>
                   </div>
 
-                  <ul className="space-y-3 text-sm leading-6 text-muted-foreground md:text-[0.95rem]">
-                    {selectedFile.project.highlights.map((highlight) => (
-                      <li key={highlight} className="flex gap-3">
-                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                        <span>{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
                 </div>
               ) : null}
             </div>
@@ -410,7 +427,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden border-x border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-20 md:py-24 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
+      <section className="relative mx-4 my-6 overflow-hidden rounded-[2rem] border border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-20 md:mx-8 md:py-24 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
         <div className="mx-auto max-w-6xl px-6">
           <div className="relative pl-4 md:pl-6">
             <p className="text-[2.3rem] font-semibold tracking-[-0.06em] text-[#111827] md:text-[4rem]">
@@ -494,7 +511,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden border-x border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-20 md:py-24 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
+      <section className="relative mx-4 my-6 overflow-hidden rounded-[2rem] border border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-20 md:mx-8 md:py-24 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
         <div className="mx-auto max-w-6xl px-6">
           <div className="relative pl-4 md:pl-6">
             <p className="text-[2.5rem] font-semibold tracking-[-0.06em] text-[#111827] md:text-[4rem]">
@@ -504,11 +521,26 @@ export default function Home() {
 
           <div className="mt-10 max-w-6xl text-[1.05rem] leading-[1.9] text-black/70 md:text-[1.35rem] md:leading-[2.1]">
             <p>
-              i&apos;m a computer science grad who just likes building stuff that works. Whether it&apos;s full-stack apps, computer vision or automation, i&apos;ll pick up whatever tool gets the job done.
+              i&apos;m a computer science undergrad at IIIT Naya Raipir who just likes building and shipping stuff with a product mindset. Whether it&apos;s full-stack apps, backend stuff, RAG pipelines, or AI automation, i&apos;ll get the job done.
             </p>
             <p className="mt-4">
-              right now, i&apos;m in bangalore, hacking on real problems and trying to solve them with code. i like to move fast, take initiative, and believe in just getting things done.
+              i love to work in a fast paced environment, spending nights on caffine shipping and fixing stuff. 
             </p>
+            <p className="mt-4">
+              aside from my tech side, i love to spend my free time creating art (i was the head of my college art society), if you&apos;d like to see some of my work, i&apos;ll atatch a folder here lol.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden border-x border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] pb-28 pt-8 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="relative border-t border-black/10 pt-6">
+            <div className="flex flex-col items-center justify-center gap-5 pb-6 text-center text-[0.95rem] text-black/60 md:text-[1.1rem]">
+              <p className="max-w-2xl text-[1.1rem] leading-7 text-black/70 md:text-[1.4rem]">
+                built using html, tailwind, next.js, and a lot of caffeine.
+              </p>
+            </div>
           </div>
         </div>
       </section>

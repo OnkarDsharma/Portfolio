@@ -399,7 +399,7 @@ export function SakuraEditorialPoster({
   keywords = SAKURA_EDITORIAL_DEFAULT_KEYWORDS,
   headline = "Petals Hold the Light | 花びらが光を抱く。",
   body = DEFAULT_BODY,
-  subheadline = "Stay for the fall. 散るまで、見ていて。",
+  subheadline = "allow myself, to introduce, myself.",
   footerLeft = "DesignLayer",
   footerCenter = "Vol. 01",
   footerRight = "03.26 2026",

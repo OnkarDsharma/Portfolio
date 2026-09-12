@@ -5,6 +5,30 @@ import { useEffect, useState } from "react";
 import SakuraEditorialPoster from "@/components/ui/sakura-editorial-poster";
 import { AnimatedFolder } from "@/components/ui/3d-folder";
 
+function GitHubIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+      <path d="M12 .5A12 12 0 0 0 8.21 23.4c.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.6-4.04-1.6-.55-1.4-1.34-1.77-1.34-1.77-1.1-.75.08-.74.08-.74 1.21.09 1.85 1.24 1.85 1.24 1.08 1.85 2.83 1.32 3.52 1 .11-.8.42-1.32.76-1.62-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.53.12-3.18 0 0 1-.32 3.3 1.23a11.4 11.4 0 0 1 6 0c2.3-1.55 3.29-1.23 3.29-1.23.66 1.65.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 12 .5Z" />
+    </svg>
+  );
+}
+
+function LinkedInIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+      <path d="M6.94 8.5A1.5 1.5 0 1 1 6.94 5.5a1.5 1.5 0 0 1 0 3ZM5.5 10.12h2.4V18H5.5v-7.88Zm4.02 0h2.31v1.08h.03c.32-.61 1.08-1.25 2.23-1.25 2.39 0 2.83 1.57 2.83 3.6V18H16.5v-16.2c0-1.15-.02-2.63-1.6-2.63-1.61 0-1.86 1.25-1.86 2.54V18h-2.4v-7.88Z" />
+    </svg>
+  );
+}
+
+function XIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+      <path d="M18.9 2h3.41l-7.46 8.52L22.7 22h-6.77l-5.3-7.77L4.65 22H1.23L9.1 12.94 1.3 2h6.93l4.79 7.12L18.9 2Zm-1.2 18h1.88L7.13 3.9H5.16L17.7 20Z" />
+    </svg>
+  );
+}
+
 const folderData = [
   {
     title: "Open Source Contributions",
@@ -162,12 +186,24 @@ type GitHubContributionResponse = {
 const weekdayLabels = ["Mon", "Wed", "Fri"];
 
 function buildContributionGrid(cells: GitHubDay[]) {
-  const grid = Array.from({ length: 7 }, () => Array.from({ length: 56 }, () => 0));
+  if (!cells.length) {
+    return { grid: Array.from({ length: 7 }, () => Array.from({ length: 1 }, () => 0)), monthLabels: [] };
+  }
 
-  cells.forEach(({ level }, index) => {
-    const row = index % 7;
-    const col = Math.floor(index / 7);
-    if (row < 7 && col < 56) {
+  const sorted = [...cells].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  const firstDate = new Date(sorted[0].date);
+  const lastDate = new Date(sorted[sorted.length - 1].date);
+  const totalDays = Math.max(1, Math.ceil((lastDate.getTime() - firstDate.getTime()) / 86400000) + 1);
+  const totalWeeks = Math.ceil(totalDays / 7);
+  const grid = Array.from({ length: 7 }, () => Array.from({ length: totalWeeks }, () => 0));
+
+  sorted.forEach(({ date, level }) => {
+    const current = new Date(date);
+    const diffDays = Math.round((current.getTime() - firstDate.getTime()) / 86400000);
+    const row = current.getDay();
+    const col = Math.floor(diffDays / 7);
+
+    if (row >= 0 && row < 7 && col >= 0 && col < totalWeeks) {
       grid[row][col] = level;
     }
   });
@@ -175,12 +211,13 @@ function buildContributionGrid(cells: GitHubDay[]) {
   const monthLabels: { label: string; col: number }[] = [];
   const seenMonths = new Set<string>();
 
-  cells.forEach(({ date }, index) => {
+  sorted.forEach(({ date }) => {
     const parsed = new Date(date);
     const monthKey = `${parsed.getFullYear()}-${parsed.getMonth()}`;
-    const col = Math.floor(index / 7);
+    const diffDays = Math.round((parsed.getTime() - firstDate.getTime()) / 86400000);
+    const col = Math.floor(diffDays / 7);
 
-    if (!seenMonths.has(monthKey)) {
+    if (!seenMonths.has(monthKey) && col >= 0 && col < totalWeeks) {
       seenMonths.add(monthKey);
       monthLabels.push({
         label: new Intl.DateTimeFormat("en-US", { month: "short" }).format(parsed).toLowerCase(),
@@ -278,6 +315,16 @@ export default function Home() {
                   <span className="sr-only">Onkareshwar Sharma</span>
                 </div>
               </div>
+
+              <div className="mt-6 flex justify-center">
+                <a
+                  href="/Onkareshwar_Sharma_Resume.pdf"
+                  download
+                  className="inline-flex items-center justify-center rounded-full border border-[#d8b48b]/80 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] px-6 py-3 text-base font-medium tracking-[0.12em] text-[#1d1d1d] transition hover:brightness-105"
+                >
+                  Resume
+                </a>
+              </div>
             </div>
           </div>
 
@@ -371,9 +418,9 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="relative mt-10 overflow-hidden rounded-[1.8rem] border border-white/10 bg-[#0d1117] p-4 text-white shadow-[0_24px_60px_rgba(2,6,23,0.45)] md:p-6">
+          <div className="relative mt-10 overflow-hidden rounded-[1.8rem] border border-white/10 bg-[#0d1117] p-4 text-white shadow-[0_24px_60px_rgba(2,6,23,0.45)] md:p-5">
             <div className="mb-4 flex items-center justify-between gap-3">
-              <p className="text-[1.1rem] font-medium text-white/90 md:text-[1.7rem]">
+              <p className="text-[1.1rem] font-medium text-white/90 md:text-[1.5rem]">
                 {githubStats ? `${githubStats.total.toLocaleString()} contributions in the last year` : "Loading contributions..."}
               </p>
               <button className="rounded-md border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/80 transition hover:bg-white/10">
@@ -402,7 +449,7 @@ export default function Home() {
               </div>
 
               <div className="flex-1 overflow-hidden rounded-xl border border-white/5 bg-white/2 px-2 py-2">
-                <div className="grid" style={{ gridTemplateColumns: `repeat(${contributionData.grid[0].length}, minmax(0, 1fr))`, gap: "4px" }}>
+                <div className="grid" style={{ gridTemplateColumns: `repeat(${contributionData.grid[0].length}, minmax(0, 1fr))`, gap: "3px" }}>
                   {contributionData.grid.map((row, rowIndex) =>
                     row.map((level, colIndex) => {
                       const colors = [
@@ -416,7 +463,7 @@ export default function Home() {
                       return (
                         <div
                           key={`${rowIndex}-${colIndex}`}
-                          className="h-3.5 w-3.5 rounded-[2px] md:h-4 md:w-4"
+                          className="h-2.5 w-2.5 rounded-[2px] md:h-3 md:w-3"
                           style={{ backgroundColor: colors[level] ?? colors[0] }}
                           title={level > 0 ? `${level} contributions` : "No contributions"}
                         />
@@ -446,6 +493,57 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <section className="relative overflow-hidden border-x border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-20 md:py-24 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="relative pl-4 md:pl-6">
+            <p className="text-[2.5rem] font-semibold tracking-[-0.06em] text-[#111827] md:text-[4rem]">
+              about me
+            </p>
+          </div>
+
+          <div className="mt-10 max-w-6xl text-[1.05rem] leading-[1.9] text-black/70 md:text-[1.35rem] md:leading-[2.1]">
+            <p>
+              i&apos;m a computer science grad who just likes building stuff that works. Whether it&apos;s full-stack apps, computer vision or automation, i&apos;ll pick up whatever tool gets the job done.
+            </p>
+            <p className="mt-4">
+              right now, i&apos;m in bangalore, hacking on real problems and trying to solve them with code. i like to move fast, take initiative, and believe in just getting things done.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <footer className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2">
+        <div className="flex items-center gap-3 rounded-full border border-white/10 bg-[#05070b] px-4 py-3 shadow-[0_12px_40px_rgba(0,0,0,0.42)] backdrop-blur-md">
+          <a
+            href="https://www.linkedin.com/in/onkareshwar-sharma-b1a40132a/"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="LinkedIn"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition hover:bg-white/10 hover:text-white"
+          >
+            <LinkedInIcon />
+          </a>
+          <a
+            href="https://x.com/HououinKyo1225"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="X"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition hover:bg-white/10 hover:text-white"
+          >
+            <XIcon />
+          </a>
+          <a
+            href="https://github.com/OnkarDsharma"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="GitHub"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition hover:bg-white/10 hover:text-white"
+          >
+            <GitHubIcon />
+          </a>
+        </div>
+      </footer>
     </main>
   );
 }

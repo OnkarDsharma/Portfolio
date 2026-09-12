@@ -170,7 +170,7 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       <SakuraEditorialPoster
-        title="ONKARESHWAR"
+        title="ONKARESHWAR SHARMA"
         headline="Crafting Digital Experiences | Building the Future"
         body="Passionate developer creating innovative solutions that bridge design and technology. Every pixel tells a story, every line of code shapes an experience."
         subheadline="Welcome to my portfolio. Let's create something extraordinary."
@@ -183,10 +183,36 @@ export default function Home() {
         className="w-full"
       />
 
-      <section className="relative overflow-hidden bg-[linear-gradient(180deg,#ece8df_0%,#f6f1ea_44%,#efe7dc_100%)] py-24 md:py-32">
-        <div className="absolute inset-x-0 top-0 h-px bg-black/5" />
+      <section className="relative overflow-hidden bg-[linear-gradient(180deg,#efe7dc_0%,#ede3d6_38%,#f7f4ee_100%)] pb-20 pt-6">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] opacity-70" />
+        <div className="absolute inset-x-0 top-0 h-px bg-black/10" />
         <div className="mx-auto max-w-7xl px-6">
-          <div className="max-w-2xl">
+          <div className="mx-auto max-w-3xl border-x border-black/10 px-6 py-14 md:px-10 md:py-16">
+            <div className="mx-auto max-w-2xl rounded-[2rem] border border-[#d8b48b]/70 bg-[linear-gradient(180deg,rgba(255,252,248,0.95)_0%,rgba(251,247,241,0.95)_100%)] p-7 shadow-[0_20px_60px_rgba(60,40,20,0.08)] md:p-10">
+              <p className="font-['Cormorant_Garamond'] text-4xl leading-none text-[#cf7a2a] md:text-5xl">
+                tldr;
+              </p>
+              <div className="mt-6 space-y-6 text-[1.05rem] leading-8 text-slate-600 md:text-[1.1rem]">
+                <p>
+                  i&apos;m obsessed with ideas, especially the ones that turn into products and keep evolving after the first draft.
+                </p>
+                <p>
+                  i build across web, backend, and systems work. from AI-assisted validation tools to security scanners and micro-subscription gateways, i like shipping things that are useful, measurable, and a little sharper than average.
+                </p>
+                <p>
+                  i adapt fast. tools change, but the focus stays on clean execution, strong logic, and work that holds up under review.
+                </p>
+              </div>
+            </div>
+            </div>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden border-x border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-24 md:py-32">
+        <div className="absolute inset-x-0 top-0 h-px bg-black/10" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-black/10" />
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="mx-auto max-w-2xl">
             <p className="text-xs font-medium uppercase tracking-[0.35em] text-black/45">
               Selected archive
             </p>
@@ -214,7 +240,7 @@ export default function Home() {
 
           <div className="mt-12">
             <div
-              className="overflow-hidden rounded-[2rem] border border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(248,244,238,0.96)_100%)] shadow-[0_26px_70px_rgba(40,20,20,0.12)] transition-all duration-500"
+              className="overflow-hidden rounded-[2rem] border border-black/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(248,244,238,0.98)_100%)] shadow-[0_26px_70px_rgba(40,20,20,0.12)] transition-all duration-500"
               style={{
                 maxHeight: selectedFile ? "460px" : "0px",
                 opacity: selectedFile ? 1 : 0,

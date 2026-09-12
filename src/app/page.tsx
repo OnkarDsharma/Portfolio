@@ -1,69 +1,116 @@
-import Image from "next/image";
+"use client";
+
+import SakuraEditorialPoster from "@/components/ui/sakura-editorial-poster";
+import { AnimatedFolder } from "@/components/ui/3d-folder";
+
+const folderData = [
+  {
+    title: "Open Source Contributions",
+    projects: [
+      {
+        id: "osc-1",
+        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
+        title: "PR Reviews",
+      },
+      {
+        id: "osc-2",
+        image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
+        title: "Bug Fixes",
+      },
+      {
+        id: "osc-3",
+        image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&q=80",
+        title: "Docs Improvements",
+      },
+    ],
+  },
+  {
+    title: "Projects",
+    projects: [
+      {
+        id: "proj-1",
+        image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=800&q=80",
+        title: "Portfolio Redesign",
+      },
+      {
+        id: "proj-2",
+        image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&q=80",
+        title: "Design System",
+      },
+      {
+        id: "proj-3",
+        image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&q=80",
+        title: "Analytics Dashboard",
+      },
+    ],
+  },
+  {
+    title: "Achievements",
+    projects: [
+      {
+        id: "ach-1",
+        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
+        title: "Hackathon Winner",
+      },
+      {
+        id: "ach-2",
+        image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
+        title: "Research Paper",
+      },
+      {
+        id: "ach-3",
+        image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&q=80",
+        title: "Dean's List",
+      },
+    ],
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen">
+      <SakuraEditorialPoster
+        title="ONKARESHWAR"
+        headline="Crafting Digital Experiences | Building the Future"
+        body="Passionate developer creating innovative solutions that bridge design and technology. Every pixel tells a story, every line of code shapes an experience."
+        subheadline="Welcome to my portfolio. Let's create something extraordinary."
+        footerLeft="Onkareshwar Sharma"
+        footerCenter="Portfolio"
+        footerRight="2026"
+        socialHandle="@onkareshwar"
+        sceneSrc="https://images.unsplash.com/photo-1522383225653-ed111181a951?w=1920&q=80"
+        sceneAlt="Cherry blossom scene"
+        className="w-full"
+      />
+
+      <section className="relative overflow-hidden bg-[linear-gradient(180deg,#ece8df_0%,#f6f1ea_44%,#efe7dc_100%)] py-24 md:py-32">
+        <div className="absolute inset-x-0 top-0 h-px bg-black/5" />
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="max-w-2xl">
+            <p className="text-xs font-medium uppercase tracking-[0.35em] text-black/45">
+              Selected archive
+            </p>
+            <h2 className="mt-4 text-4xl font-semibold tracking-tight text-black/90 md:text-5xl">
+              Three folders, three chapters of the work.
+            </h2>
+            <p className="mt-4 max-w-xl text-base leading-7 text-black/60 md:text-lg">
+              Scroll into the archive and open each folder to reveal the files inside. Use this area for open source contributions,
+              projects, and achievements.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-8 justify-items-center lg:grid-cols-3 lg:items-start">
+            {folderData.map((folder) => (
+              <AnimatedFolder
+                key={folder.title}
+                title={folder.title}
+                projects={folder.projects}
+                className="w-full max-w-[360px]"
+              />
+            ))}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </section>
+    </main>
   );
 }

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import SakuraEditorialPoster from "@/components/ui/sakura-editorial-poster";
 import { AnimatedFolder } from "@/components/ui/3d-folder";
 
@@ -10,17 +12,44 @@ const folderData = [
       {
         id: "osc-1",
         image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
-        title: "PR Reviews",
+        title: "GrowthBook REST API",
+        summary: "Built a public REST endpoint for posting comments to experiments programmatically.",
+        details:
+          "Engineered a public REST API endpoint at POST /experiments/:id/comment for GrowthBook, enabling programmatic comment posting while reusing the existing backend logic for permission checks, data models, and validation.",
+        highlights: [
+          "Enabled structured feedback from automation and internal tools.",
+          "Kept permission checks and validation aligned with the backend.",
+          "Exposed a documented API surface for contributor workflows.",
+        ],
+        tags: ["REST API", "Backend", "GrowthBook"],
       },
       {
         id: "osc-2",
         image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
-        title: "Bug Fixes",
+        title: "Saved Groups Pagination",
+        summary: "Fixed a client-side pagination issue so search filters stayed in sync across pages.",
+        details:
+          "Resolved a client-side pagination bug within the Saved Groups interface by synchronizing search filters with pagination state, restoring accurate data retrieval and search functionality across multi-page datasets.",
+        highlights: [
+          "Prevented stale results during pagination.",
+          "Restored accurate search behavior for large datasets.",
+          "Improved the workflow for grouped records and filters.",
+        ],
+        tags: ["Pagination", "Search", "Frontend"],
       },
       {
         id: "osc-3",
         image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&q=80",
-        title: "Docs Improvements",
+        title: "Maintainer Collaboration",
+        summary: "Modernized low-level C/C++ type declarations while collaborating through review and issues.",
+        details:
+          "Merged a contribution modernizing kernel-level C/C++ type declarations across Quasar and Wormhole components, while collaborating with maintainers through issue discussions and code review to keep the change aligned with upstream expectations.",
+        highlights: [
+          "Worked through issue discussions before merging changes.",
+          "Helped modernize low-level declarations across components.",
+          "Kept the contribution aligned with maintainer feedback.",
+        ],
+        tags: ["C/C++", "Code Review", "Collaboration"],
       },
     ],
   },
@@ -30,17 +59,44 @@ const folderData = [
       {
         id: "proj-1",
         image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=800&q=80",
-        title: "Portfolio Redesign",
+        title: "CSC Sarthi",
+        summary: "An AI-powered pre-submission assistant for 30+ government services with validation and OCR.",
+        details:
+          "Architected an AI-powered pre-submission validation platform for 30+ government services, performing real-time form validation and rejection-risk prediction. The system combined a machine learning risk engine, OCR-based document verification, and a WhatsApp chatbot workflow with a Django analytics dashboard.",
+        highlights: [
+          "Reached around 87% validation accuracy with field-level explainability.",
+          "Detected 3+ mismatch types by cross-validating documents against form inputs.",
+          "Visualized the top 5 rejection causes across 30+ districts.",
+        ],
+        tags: ["Python", "Django", "Scikit-learn", "OCR"],
       },
       {
         id: "proj-2",
         image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&q=80",
-        title: "Design System",
+        title: "Website Security Scanner API",
+        summary: "A REST API that ran 10 parallel security checks and returned a scored JSON risk report.",
+        details:
+          "Programmed and shipped a REST API running 10 parallel security checks, including HTTP security headers, TLS/SSL certificate validation, DNS-based email spoofing checks, CORS misconfiguration, cookie security, exposed credential files, CMS fingerprinting, and more. The service returned a scored JSON risk report and was later published on RapidAPI.",
+        highlights: [
+          "Reached 264+ users after publishing on RapidAPI.",
+          "Added SSRF protections, per-IP rate limiting, and honest failure reporting.",
+          "Launched a public web demo for in-browser scans without an API key.",
+        ],
+        tags: ["Node.js", "Vercel", "REST API", "DNS/TLS"],
       },
       {
         id: "proj-3",
         image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&q=80",
-        title: "Analytics Dashboard",
+        title: "LiteLLM Gateway",
+        summary: "A micro-subscription SaaS platform for premium LLM access with rate limiting and streaming.",
+        details:
+          "Engineered a micro-subscription SaaS platform providing short-term access to premium LLMs such as Claude Sonnet and GPT-4o. The architecture used a Redis-based hybrid rate limiter with a hidden ~100K token ceiling, a three-tier storage setup, prompt caching, and Server-Sent Events for real-time token responses.",
+        highlights: [
+          "Replaced recurring $20/month subscriptions with short-term access.",
+          "Structured storage with PostgreSQL, MongoDB, and S3/Cloudflare R2.",
+          "Reduced inference costs while streaming token responses in real time.",
+        ],
+        tags: ["React", "Node.js", "PostgreSQL", "MongoDB", "Redis"],
       },
     ],
   },
@@ -51,22 +107,66 @@ const folderData = [
         id: "ach-1",
         image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
         title: "Hackathon Winner",
+        summary: "Won first place at E-Summit 2026 by pitching a civic-tech automation tool.",
+        details:
+          "Secured first place by pitching a civic-tech automation tool to an expert panel, showcasing live document parsing and compliance-check capabilities during the E-Summit 2026 hackathon.",
+        highlights: [
+          "Delivered a live demo focused on document parsing.",
+          "Showcased compliance-check capabilities under panel review.",
+          "Presented a solution aimed at civic-tech automation.",
+        ],
+        tags: ["E-Summit 2026", "Hackathon", "Civic Tech"],
       },
       {
         id: "ach-2",
         image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
-        title: "Research Paper",
+        title: "Case Study Winner",
+        summary: "Won the Xcelerate 2026 case study competition with a proposal for a Central India manufacturing hub.",
+        details:
+          "Proposed a strategic 'Three pillars solution' for a Central India Manufacturing Hub and successfully defended the proposal and counter-questions from the judging panel during Xcelerate 2026.",
+        highlights: [
+          "Built a strategy centered on three pillars.",
+          "Defended the proposal against panel counter-questions.",
+          "Won the case study competition at Xcelerate 2026.",
+        ],
+        tags: ["Xcelerate 2026", "Strategy", "Competition"],
       },
       {
         id: "ach-3",
         image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&q=80",
-        title: "Dean's List",
+        title: "Head of Art Society",
+        summary: "Led a team of 50 students organizing campus-wide cultural events and workshops.",
+        details:
+          "As Head of Art Society (Indradhanush), led a team of 50 students in organizing campus-wide cultural events and workshops at IIIT Naya Raipur from Aug 2025 to July 2026, combining leadership and coordination across the society's programming.",
+        highlights: [
+          "Managed a 50-student team across events and workshops.",
+          "Supported campus-wide cultural programming and coordination.",
+          "Built leadership experience alongside technical work.",
+        ],
+        tags: ["Leadership", "Indradhanush", "Community"],
       },
     ],
   },
 ];
 
+type SelectedFile = {
+  folderTitle: string;
+  project: (typeof folderData)[number]["projects"][number];
+} | null;
+
 export default function Home() {
+  const [selectedFile, setSelectedFile] = useState<SelectedFile>(null);
+
+  const handleSelectProject = (
+    project: (typeof folderData)[number]["projects"][number],
+    folderTitle: string,
+  ) => {
+    setSelectedFile((current) => {
+      if (current?.project.id === project.id) return null;
+      return { folderTitle, project };
+    });
+  };
+
   return (
     <main className="min-h-screen">
       <SakuraEditorialPoster
@@ -106,8 +206,64 @@ export default function Home() {
                 title={folder.title}
                 projects={folder.projects}
                 className="w-full max-w-[360px]"
+                selectedProjectId={selectedFile?.project.id ?? null}
+                onSelectProject={handleSelectProject}
               />
             ))}
+          </div>
+
+          <div className="mt-12">
+            <div
+              className="overflow-hidden rounded-[2rem] border border-border bg-[linear-gradient(180deg,rgba(255,255,255,0.92)_0%,rgba(248,244,238,0.96)_100%)] shadow-[0_26px_70px_rgba(40,20,20,0.12)] transition-all duration-500"
+              style={{
+                maxHeight: selectedFile ? "460px" : "0px",
+                opacity: selectedFile ? 1 : 0,
+                transform: selectedFile ? "translateY(0)" : "translateY(24px)",
+                pointerEvents: selectedFile ? "auto" : "none",
+              }}
+            >
+              {selectedFile ? (
+                <div className="flex flex-col gap-5 p-6 md:p-8 lg:p-10">
+                  <div>
+                    <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                      {selectedFile.folderTitle}
+                    </p>
+                    <h3 className="mt-2 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
+                      {selectedFile.project.title}
+                    </h3>
+                    <p className="mt-3 text-sm leading-6 text-muted-foreground md:text-base">
+                      {selectedFile.project.summary}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    {selectedFile.project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full border border-border bg-muted px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="rounded-2xl border border-border bg-background/75 p-5">
+                    <p className="text-sm leading-7 text-foreground/85 md:text-[0.98rem]">
+                      {selectedFile.project.details}
+                    </p>
+                  </div>
+
+                  <ul className="space-y-3 text-sm leading-6 text-muted-foreground md:text-[0.95rem]">
+                    {selectedFile.project.highlights.map((highlight) => (
+                      <li key={highlight} className="flex gap-3">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                        <span>{highlight}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
           </div>
         </div>
       </section>

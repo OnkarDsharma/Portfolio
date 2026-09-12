@@ -205,10 +205,10 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mr-[clamp(0rem,4vw,3rem)] hidden shrink-0 self-start md:mt-10 md:block lg:mt-14">
+            <div className="mr-[clamp(0rem,4vw,3rem)] hidden shrink-0 self-start md:mt-12 md:block lg:mt-16">
               <div className="rounded-full border border-[#d8b48b]/80 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] p-2 shadow-[0_20px_60px_rgba(60,40,20,0.08)]">
                 <div
-                  className="relative h-32 w-32 overflow-hidden rounded-full border border-white/80 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.92),rgba(246,219,199,0.88)_48%,rgba(215,143,108,0.92))] md:h-40 md:w-40"
+                  className="relative h-36 w-36 overflow-hidden rounded-full border border-white/80 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.92),rgba(246,219,199,0.88)_48%,rgba(215,143,108,0.92))] md:h-48 md:w-48 lg:h-52 lg:w-52"
                   style={{
                     backgroundImage: "url('/photo.jpeg')",
                     backgroundSize: "cover",

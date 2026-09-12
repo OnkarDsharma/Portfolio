@@ -4,12 +4,14 @@ import { forwardRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-interface Project {
+export interface Project {
   id: string;
   image: string;
   title: string;
   summary: string;
   details: string;
+  liveUrl?: string;
+  repoUrl?: string;
   highlights: string[];
   tags: string[];
 }

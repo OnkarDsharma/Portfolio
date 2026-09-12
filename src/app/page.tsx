@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import SakuraEditorialPoster from "@/components/ui/sakura-editorial-poster";
-import { AnimatedFolder } from "@/components/ui/3d-folder";
+import { AnimatedFolder, type Project } from "@/components/ui/3d-folder";
 
 function GitHubIcon() {
   return (
@@ -29,7 +29,7 @@ function XIcon() {
   );
 }
 
-const folderData = [
+const folderData: { title: string; projects: Project[] }[] = [
   {
     title: "Open Source Contributions",
     projects: [
@@ -81,6 +81,7 @@ const folderData = [
         details:
           "I built the system with security and reliability in mind, adding SSRF protection, private IP and cloud metadata blocking, per-IP rate limiting, and accurate failure handling to avoid misleading scan results. The API was published on RapidAPI with tiered pricing and has grown to 265+ users, turning a technical security tool into a real-world product. I also built a public web demo that lets non-technical users run scans directly from their browser, creating a simple funnel into the API.",
         liveUrl: "https://website-security-scanner-api.vercel.app/",
+        repoUrl: "https://github.com/OnkarDsharma/website-security-api",
         highlights: [],
         tags: ["Node.js", "Vercel", "REST API", "DNS/TLS"],
       },
@@ -91,6 +92,7 @@ const folderData = [
         summary: "An AI-powered pre-submission platform built to help citizens and CSC operators catch errors before submitting applications across 30+ government services.",
         details:
           "I developed the ML-based rejection-risk engine, achieving ~87% validation accuracy, along with field-level explanations to help users understand potential issues. I also built an OCR document verification pipeline that extracts Name, ID, and DOB and cross-checks them against form data to detect document mismatches. The platform also includes a WhatsApp pre-verification workflow and an analytics dashboard tracking rejection patterns across 30+ districts. The project was selected by the Chhattisgarh Government as a winning solution at E-Summit’26, where our team won the AIML category hackathon. This gave the project validation beyond a prototype and demonstrated its potential for solving a real government-service workflow problem.",
+        repoUrl: "https://github.com/GAURAV-1313/csc",
         highlights: [],
         tags: ["Python", "Django", "Scikit-learn", "OCR"],
       },
@@ -101,6 +103,7 @@ const folderData = [
         summary: "A micro-subscription SaaS platform for premium LLM access with rate limiting and streaming.",
         details:
           "Engineered a micro-subscription SaaS platform providing short-term access to premium LLMs such as Claude Sonnet and GPT-4o. The architecture used a Redis-based hybrid rate limiter with a hidden ~100K token ceiling, a three-tier storage setup, prompt caching, and Server-Sent Events for real-time token responses.",
+        repoUrl: "https://github.com/OnkarDsharma/LiteLLM",
         highlights: [
           "Replaced recurring $20/month subscriptions with short-term access.",
           "Structured storage with PostgreSQL, MongoDB, and S3/Cloudflare R2.",
@@ -391,16 +394,30 @@ export default function Home() {
                       </p>
                     </div>
 
-                    {selectedFile.project.liveUrl ? (
-                      <a
-                        href={selectedFile.project.liveUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex shrink-0 items-center justify-center rounded-full border border-[#c98d52]/80 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] px-4 py-2 text-[10px] font-medium uppercase tracking-[0.22em] text-[#1f1a17] transition hover:brightness-105"
-                      >
-                        Live
-                      </a>
-                    ) : null}
+                    <div className="flex shrink-0 items-center gap-2">
+                      {selectedFile.project.repoUrl ? (
+                        <a
+                          href={selectedFile.project.repoUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label="Open project repository"
+                          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-[#0b0d12] text-white transition hover:brightness-110"
+                        >
+                          <GitHubIcon />
+                        </a>
+                      ) : null}
+
+                      {selectedFile.project.liveUrl ? (
+                        <a
+                          href={selectedFile.project.liveUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex shrink-0 items-center justify-center rounded-full border border-[#c98d52]/80 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] px-4 py-2 text-[10px] font-medium uppercase tracking-[0.22em] text-[#1f1a17] transition hover:brightness-105"
+                        >
+                          Live
+                        </a>
+                      ) : null}
+                    </div>
                   </div>
 
                   <div className="flex flex-wrap gap-2">

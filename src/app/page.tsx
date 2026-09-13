@@ -14,11 +14,7 @@ function GitHubIcon() {
 }
 
 function LinkedInIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
-      <path d="M6.94 8.5A1.5 1.5 0 1 1 6.94 5.5a1.5 1.5 0 0 1 0 3ZM5.5 10.12h2.4V18H5.5v-7.88Zm4.02 0h2.31v1.08h.03c.32-.61 1.08-1.25 2.23-1.25 2.39 0 2.83 1.57 2.83 3.6V18H16.5v-16.2c0-1.15-.02-2.63-1.6-2.63-1.61 0-1.86 1.25-1.86 2.54V18h-2.4v-7.88Z" />
-    </svg>
-  );
+  return <img src="/linkedin.png" alt="LinkedIn" className="h-4 w-4 object-contain" />;
 }
 
 function XIcon() {
@@ -300,11 +296,14 @@ export default function Home() {
               </p>
               <div className="mt-6 space-y-6 text-[1.05rem] leading-8 text-slate-600 md:text-[1.1rem]">
                 <p>
-                  i&apos;m obsessed with shipping features, applications which people actually use.
+                  i&apos;m obsessed with shipping features, applications which people actually use {":)"}
                 </p>
                 <p>
                   i love doing contributions across YC startups, global AI startups helping them ship new features or fix thier core bugs,
-                  i recently shipped a website security scanner API with tier based subscription and scaled it to 264+ users in just 2 weeks.
+                  
+                </p>
+                <p>
+                  recently shipped a website security scanner API with tier based subscription and scaled it to 264+ users in just 2 weeks.
                 </p>
                 <p>
                   i especialize across backend, web and systems work.
@@ -544,7 +543,7 @@ export default function Home() {
               i love to work in a fast paced environment, spending nights on caffine shipping and fixing stuff. 
             </p>
             <p className="mt-4">
-              aside from my tech side, i love to spend my free time creating art (i was the head of my college art society), if you&apos;d like to see some of my work, i&apos;ll atatch a folder here lol.
+              aside from my tech side, i love to spend my free time creating art ,
             </p>
           </div>
         </div>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import SakuraEditorialPoster from "@/components/ui/sakura-editorial-poster";
 import { AnimatedFolder, type Project } from "@/components/ui/3d-folder";
+import { OriginButton } from "@/components/ui/origin-button";
 
 function GitHubIcon() {
   return (
@@ -14,7 +15,11 @@ function GitHubIcon() {
 }
 
 function LinkedInIcon() {
-  return <img src="/linkedin.png" alt="LinkedIn" className="h-4 w-4 object-contain" />;
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4 fill-current">
+      <path d="M6.94 8.5A1.56 1.56 0 1 1 6.94 5.4a1.56 1.56 0 0 1 0 3.1ZM5.5 10.2h2.88v8.4H5.5v-8.4Zm4.4 0h2.76v1.15h.04c.38-.72 1.32-1.48 2.72-1.48 2.91 0 3.44 1.92 3.44 4.4v4.33h-2.88v-4.05c0-1.01-.02-2.3-1.4-2.3-1.41 0-1.63 1.1-1.63 2.23v4.12H9.9v-8.4Z" />
+    </svg>
+  );
 }
 
 function XIcon() {
@@ -306,7 +311,7 @@ export default function Home() {
                   recently shipped a website security scanner API with tier based subscription and scaled it to 264+ users in just 2 weeks.
                 </p>
                 <p>
-                  i especialize across backend, web and systems work.
+                  i especialize across backend, systems and production AI (agents, pipelines, RAG).
                 </p>
                 <p>
                   I work with the intention of shipping.
@@ -331,12 +336,10 @@ export default function Home() {
               </div>
 
               <div className="mt-6 flex justify-center">
-                <a
-                  href="/Onkareshwar_Sharma_Resume.pdf"
-                  download
-                  className="inline-flex items-center justify-center rounded-full border border-[#d8b48b]/80 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] px-6 py-3 text-base font-medium tracking-[0.12em] text-[#1d1d1d] transition hover:brightness-105"
-                >
-                  Resume
+                <a href="/Onkareshwar_Sharma_Resume.pdf" download>
+                  <OriginButton className="h-12 rounded-full border-[0.5px] border-[#d8b48b]/80 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] px-6 text-base font-medium tracking-[0.12em] shadow-[0_18px_38px_-24px_rgba(60,40,20,0.35)] hover:brightness-105 dark:bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)]">
+                    Resume
+                  </OriginButton>
                 </a>
               </div>
             </div>
@@ -350,8 +353,7 @@ export default function Home() {
               Three folders, three chapters of the work.
             </h2>
             <p className="mt-4 max-w-xl text-base leading-7 text-black/60 md:text-lg">
-              Scroll into the archive and open each folder to reveal the files inside. Use this area for open source contributions,
-              projects, and achievements.
+              Scroll into the archive and open each folder to reveal the files inside.
             </p>
           </div>
 
@@ -537,13 +539,13 @@ export default function Home() {
 
           <div className="mt-10 max-w-6xl text-[1.05rem] leading-[1.9] text-black/70 md:text-[1.35rem] md:leading-[2.1]">
             <p>
-              i&apos;m a computer science undergrad at IIIT Naya Raipir who just likes building and shipping stuff with a product mindset. Whether it&apos;s full-stack apps, backend stuff, RAG pipelines, or AI automation, i&apos;ll get the job done.
+              i&apos;m a computer science undergrad at IIIT Naya Raipir who just likes building and shipping stuff with a product mindset. i especialize in working with backend, production AI (agents, pipelines, RAG) stuff with the goal of shipping.
             </p>
             <p className="mt-4">
               i love to work in a fast paced environment, spending nights on caffine shipping and fixing stuff. 
             </p>
             <p className="mt-4">
-              aside from my tech side, i love to spend my free time creating art ,
+              aside from my tech side, i love to spend my free time creating art.
             </p>
           </div>
         </div>

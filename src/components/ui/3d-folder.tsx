@@ -192,14 +192,16 @@ export function AnimatedFolder({
           {title}
         </h3>
 
-        <p
-          className="text-sm text-muted-foreground transition-all duration-300"
-          style={{
-            opacity: isHovered ? 0.7 : 1,
-          }}
-        >
-          {projects.length} projects
-        </p>
+        {title === "Projects" && (
+          <p
+            className="text-sm text-muted-foreground transition-all duration-300"
+            style={{
+              opacity: isHovered ? 0.7 : 1,
+            }}
+          >
+            {projects.length} projects
+          </p>
+        )}
 
         <div
           className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 text-xs text-muted-foreground transition-all duration-300"

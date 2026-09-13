@@ -556,7 +556,7 @@ export default function Home() {
           <div className="relative border-t border-black/10 pt-6">
             <div className="flex flex-col items-center justify-center gap-5 pb-6 text-center text-[0.95rem] text-black/60 md:text-[1.1rem]">
               <p className="max-w-2xl text-[1.1rem] leading-7 text-black/70 md:text-[1.4rem]">
-                built using html, tailwind, next.js, and a lot of caffeine.
+                built using html, tailwind, next.js.
               </p>
             </div>
           </div>

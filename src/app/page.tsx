@@ -51,20 +51,30 @@ const folderData: { title: string; projects: Project[] }[] = [
       {
         id: "osc-1",
         image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
-        title: "GrowthBook Rest API Endpoint",
-        summary: "Built a public REST endpoint for posting comments to experiments programmatically.",
-        details:
-          "I contributed to GrowthBook by building a public REST API endpoint (POST /experiments/:id/comment) that allows users to add comments to experiments programmatically. Instead of duplicating existing logic, I connected the endpoint to GrowthBook’s internal discussion system, so it automatically follows the same permission checks and validation rules already used by the UI. I also tested the endpoint end-to-end across different edge cases, which helped close feature #6478. As part of the contribution, I updated the OpenAPI specification as well, making the API easier to extend for future MCP server integration.",
+        title: "GrowthBook: API Support for Posting Experiment Comments",
+        summary: "Open Source Contribution | TypeScript, Node.js, REST API | PR #6526",
+        details: `
+• Built a new public REST API endpoint (\`POST /experiments/:id/comment\`) enabling programmatic comment posting on experiments, previously only possible through the UI.
+• Reused existing internal comment/discussion logic (\`addComment\`) to ensure identical permission checks, data model, and validation as the UI's native comment feature, avoiding duplicated business logic.
+• Added clear, structured error handling for invalid input (empty comments) and nonexistent experiment IDs, returning descriptive errors instead of crashes.
+• Regenerated the OpenAPI spec and verified linting, type-checking, and formatting checks passed; manually tested end-to-end against a local dev instance with valid, invalid, and edge-case requests.
+• Scoped the PR precisely to the API layer, deferring related MCP tool support to a focused follow-up PR since GrowthBook's MCP server lives in a separate repository.
+`,
         highlights: [],
         tags: ["REST API", "Backend", "GrowthBook"],
       },
       {
         id: "osc-2",
         image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
-        title: "GrowthBook Pagination Fix",
-        summary: "Fixed a client-side pagination issue so search filters stayed in sync across pages.",
-        details:
-          "I resolved a client-side pagination bug in the Saved Groups feature where search queries executed on subsequent pages failed to display valid results. By diagnosing the issue as a stale pagination offset applied to a dynamically filtered data array, I implemented a state reset within the search handler to ensure the data sliced correctly on every keystroke. After conducting thorough local testing to verify edge cases, including sorting interactions and enterprise feature flags, this fix successfully closed bug #6889 and restored seamless search functionality to the UI.",
+        title: "GrowthBook: Fix Pagination Bug in Saved Groups Search",
+        summary: "Open Source Contribution | TypeScript, React | PR #6904",
+        details: `
+• Diagnosed and fixed a bug in Saved Groups' ID List page where searching returned no results if the user was on any page other than page 1.
+• Root-caused it to \`currentPage\` never resetting when the search filter changed, so a correctly-filtered array got sliced at a stale offset, silently returning empty results despite matching items existing.
+• Fixed by resetting pagination to page 1 on every search input change, mirroring the reset behavior already used by the existing sort-order toggle for consistency.
+• Verified the fix locally with a 200-item test list, confirming search now correctly finds matches from any starting page, while unaffected features (single-page search, sort toggle) remained unbroken.
+• Ran the full lint, type-check, and test suite, confirming pre-existing unrelated test failures were present on unmodified \`main\` and not introduced by this change.
+`,
         highlights: [],
         tags: ["Pagination", "Search", "Frontend"],
       },
@@ -287,6 +297,24 @@ export default function Home() {
                     );
                   }
 
+                  // Render inline code wrapped in backticks
+                  const codeSplit = part.split(/(`[^`]+`)/g).filter(Boolean);
+                  if (codeSplit.length > 1) {
+                    return (
+                      <span key={`${part}-${index}`}>
+                        {codeSplit.map((seg, si) =>
+                          /`[^`]+`/.test(seg) ? (
+                            <code key={si} className="rounded bg-muted px-1 py-0.5 text-[0.92em] font-mono text-[#8c5a2d]">
+                              {seg.replace(/`/g, "")}
+                            </code>
+                          ) : (
+                            <span key={si}>{seg}</span>
+                          ),
+                        )}
+                      </span>
+                    );
+                  }
+
                   return <span key={`${part}-${index}`}>{part}</span>;
                 })}
               </li>
@@ -311,6 +339,23 @@ export default function Home() {
           >
             {part}
           </a>
+        );
+      }
+
+      const codeSplit = String(part).split(/(`[^`]+`)/g).filter(Boolean);
+      if (codeSplit.length > 1) {
+        return (
+          <span key={`${part}-${index}`}>
+            {codeSplit.map((seg, si) =>
+              /`[^`]+`/.test(seg) ? (
+                <code key={si} className="rounded bg-muted px-1 py-0.5 text-[0.92em] font-mono text-[#8c5a2d]">
+                  {seg.replace(/`/g, "")}
+                </code>
+              ) : (
+                <span key={si}>{seg}</span>
+              ),
+            )}
+          </span>
         );
       }
 

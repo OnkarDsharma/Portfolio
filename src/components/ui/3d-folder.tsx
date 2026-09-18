@@ -38,8 +38,8 @@ const ProjectCard = forwardRef<HTMLDivElement, ProjectCardProps>(function Projec
   { image, title, delay, isVisible, index, onClick, isSelected },
   ref,
 ) {
-  const rotations = [-12, 0, 12];
-  const translations = [-55, 0, 55];
+  const rotations = [-18, -6, 6, 18];
+  const translations = [-75, -25, 25, 75];
 
   return (
     <div
@@ -145,7 +145,7 @@ export function AnimatedFolder({
               zIndex: 20,
             }}
           >
-            {projects.slice(0, 3).map((project, index) => (
+            {projects.slice(0, 4).map((project, index) => (
               <ProjectCard
                 key={project.id}
                 image={project.image}

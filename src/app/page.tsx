@@ -35,6 +35,20 @@ const folderData: { title: string; projects: Project[] }[] = [
     title: "Open Source Contributions",
     projects: [
       {
+        id: "osc-4",
+        image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&q=80",
+        title: "Onyx : GitLab Connector Branch Support",
+        summary: "Open Source Contribution | Python, GitLab API | PR #12676",
+        details: `
+• Added configurable branch support to Onyx's GitLab connector, letting it sync from any branch instead of only the repo's default, with zero config change required for existing users.
+• Threaded the new branch parameter through two separate GitLab API calls (file listing + file content) to keep them in sync and prevent mismatched file states.
+• Replaced raw API exceptions with clear, descriptive errors for invalid or inaccessible branches, and fixed GitLab links to point to the correct branch instead of always defaulting to main.
+• Wrote regression tests against a live GitLab repo covering branch override, default fallback, and error handling, verified full backward compatibility with the pinned python-gitlab version.
+`,
+        highlights: [],
+        tags: ["Python", "GitLab API", "Backend"],
+      },
+      {
         id: "osc-1",
         image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
         title: "GrowthBook Rest API Endpoint",
@@ -68,6 +82,7 @@ const folderData: { title: string; projects: Project[] }[] = [
         ],
         tags: ["C/C++", "Code Review", "Collaboration"],
       },
+      
     ],
   },
   {
@@ -244,6 +259,44 @@ export default function Home() {
 
   const formatProjectDetails = (text: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    // If the text contains bullet markers, render as a list
+    if (/^\s*(?:\u2022|\-|\*)/m.test(text)) {
+      const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+
+      return (
+        <ul className="list-disc pl-5 space-y-3">
+          {lines.map((line, i) => {
+            const content = line.replace(/^\s*(?:\u2022|\-|\*)\s*/, "");
+            const parts = content.split(urlRegex);
+
+            return (
+              <li key={i} className="text-sm leading-7 text-foreground/85 md:text-[0.98rem]">
+                {parts.map((part, index) => {
+                  if (part.match(/^https?:\/\//)) {
+                    return (
+                      <a
+                        key={`${part}-${index}`}
+                        href={part}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[#8c5a2d] underline decoration-[#8c5a2d]/60 underline-offset-4 transition hover:text-[#6a431e]"
+                      >
+                        {part}
+                      </a>
+                    );
+                  }
+
+                  return <span key={`${part}-${index}`}>{part}</span>;
+                })}
+              </li>
+            );
+          })}
+        </ul>
+      );
+    }
+
+    // Fallback: inline rendering with links preserved
     const parts = text.split(urlRegex);
 
     return parts.map((part, index) => {
@@ -374,7 +427,7 @@ export default function Home() {
             <div
               className="overflow-hidden rounded-[2rem] border border-black/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(248,244,238,0.98)_100%)] shadow-[0_26px_70px_rgba(40,20,20,0.12)] transition-all duration-500"
               style={{
-                maxHeight: selectedFile ? "460px" : "0px",
+                maxHeight: selectedFile ? "min(80vh, 880px)" : "0px",
                 opacity: selectedFile ? 1 : 0,
                 transform: selectedFile ? "translateY(0)" : "translateY(24px)",
                 pointerEvents: selectedFile ? "auto" : "none",
@@ -432,10 +485,10 @@ export default function Home() {
                     ))}
                   </div>
 
-                  <div className="rounded-2xl border border-border bg-background/75 p-5">
-                    <p className="text-sm leading-7 text-foreground/85 md:text-[0.98rem]">
+                  <div className="rounded-2xl border border-border bg-background/75 p-6 md:p-8 pb-8">
+                    <div className="text-sm leading-7 text-foreground/85 md:text-[0.98rem]">
                       {formatProjectDetails(selectedFile.project.details)}
-                    </p>
+                    </div>
                   </div>
 
                 </div>

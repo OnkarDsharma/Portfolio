@@ -378,7 +378,7 @@ export default function Home() {
       <SakuraEditorialPoster
         title="ONKARESHWAR SHARMA"
         headline="heya, i'm onkareshwar"
-        body="Passionate developer creating innovative solutions that bridge design and technology. Every pixel tells a story, every line of code shapes an experience."
+        body=""
         footerLeft="Onkareshwar Sharma"
         footerCenter="Portfolio"
         footerRight="2026"

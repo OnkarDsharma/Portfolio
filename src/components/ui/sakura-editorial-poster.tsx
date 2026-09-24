@@ -37,9 +37,7 @@ const FONT_HREF =
 
 
 export const SAKURA_EDITORIAL_DEFAULT_KEYWORDS: SakuraEditorialKeyword[] = [
-  { label: "Bloom" },
-  { label: "Pause" },
-  { label: "Return" },
+  // Removed default keyword labels per user request
 ];
 
 
@@ -346,11 +344,13 @@ function SakuraEditorialCopy({
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#4a2c32]/55 via-[#c99aa0]/25 to-transparent"
       />
-      <div className="relative z-10 flex items-start justify-between gap-3 text-[clamp(9px,1.7cqw,11px)] font-light tracking-[0.16em] text-[#f6eee8]/70">
-        {keywordItems.map((item) => (
-          <span key={item.label}>{item.label}</span>
-        ))}
-      </div>
+      {keywordItems.length > 0 ? (
+        <div className="relative z-10 flex items-start justify-between gap-3 text-[clamp(9px,1.7cqw,11px)] font-light tracking-[0.16em] text-[#f6eee8]/70">
+          {keywordItems.map((item) => (
+            <span key={item.label}>{item.label}</span>
+          ))}
+        </div>
+      ) : null}
 
 
       <h2

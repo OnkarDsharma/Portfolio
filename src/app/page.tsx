@@ -118,6 +118,7 @@ const folderData: { title: string; projects: Project[] }[] = [
         summary: "An AI-powered pre-submission platform built to help citizens and CSC operators catch errors before submitting applications across 30+ government services.",
         details:
           "I developed the ML-based rejection-risk engine, achieving ~87% validation accuracy, along with field-level explanations to help users understand potential issues. I also built an OCR document verification pipeline that extracts Name, ID, and DOB and cross-checks them against form data to detect document mismatches. The platform also includes a WhatsApp pre-verification workflow and an analytics dashboard tracking rejection patterns across 30+ districts. The project was selected by the Chhattisgarh Government as a winning solution at E-Summit’26, where our team won the AIML category hackathon. This gave the project validation beyond a prototype and demonstrated its potential for solving a real government-service workflow problem.",
+        liveUrl: "https://csc-ai-copilot.vercel.app/",
         repoUrl: "https://github.com/GAURAV-1313/csc",
         highlights: [],
         tags: ["Python", "Django", "Scikit-learn", "OCR"],

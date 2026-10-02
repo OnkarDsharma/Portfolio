@@ -403,7 +403,7 @@ export default function Home() {
                   i&apos;m obsessed with shipping features, applications which people actually use {":)"}
                 </p>
                 <p>
-                  i love doing contributions across YC startups, global AI startups helping them ship new features or fix thier core bugs,
+                  i love contributing across YC startups, global AI startups helping them ship new features or fix their core bugs,
                   
                 </p>
                 <p>
@@ -638,7 +638,7 @@ export default function Home() {
 
           <div className="mt-10 max-w-6xl text-[1.05rem] leading-[1.9] text-black/70 md:text-[1.35rem] md:leading-[2.1]">
             <p>
-              i&apos;m a computer science undergrad at IIIT Naya Raipir who just likes building and shipping stuff with a product mindset. i especialize in working with backend, production AI (agents, pipelines, RAG) stuff with the goal of shipping.
+              i&apos;m a computer science undergrad at IIIT Naya Raipur who just likes building and shipping stuff with a product mindset. i specialize in working with backend, production AI (agents, pipelines, RAG) stuff with the goal of shipping.
             </p>
             <p className="mt-4">
               i love to work in a fast paced environment, spending nights on caffeine shipping and fixing stuff. 

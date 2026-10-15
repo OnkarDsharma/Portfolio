@@ -641,7 +641,7 @@ export default function Home() {
               i&apos;m a computer science undergrad at IIIT Naya Raipur who just likes building and shipping stuff with a product mindset. i specialize in working with backend, production AI (agents, pipelines, RAG) stuff with the goal of shipping.
             </p>
             <p className="mt-4">
-              i love to work in a fast paced environment, spending nights on caffeine shipping and fixing stuff. 
+              i love to work in a fast paced environment, spending nights on caffeine sfihipping and fixing stuff. 
             </p>
             <p className="mt-4">
               aside from my tech side, i love to spend my free time creating art.

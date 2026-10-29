@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 
 import SakuraEditorialPoster from "@/components/ui/sakura-editorial-poster";
-import { AnimatedFolder, type Project } from "@/components/ui/3d-folder";
+import GlassFolder, { type ArtPreset, type FolderFile } from "@/components/ui/glass-folder-cards";
+import { type Project } from "@/components/ui/3d-folder";
 import { OriginButton } from "@/components/ui/origin-button";
 
 function GitHubIcon() {
@@ -188,6 +189,30 @@ const folderData: { title: string; projects: Project[] }[] = [
     ],
   },
 ];
+
+const folderConfigs: Record<
+  string,
+  { art: ArtPreset; seed: number; appearDelay: number; meta: string }
+> = {
+  "Open Source Contributions": {
+    art: "aurora",
+    seed: 3,
+    appearDelay: 0,
+    meta: "3 contributions",
+  },
+  Projects: {
+    art: "ember",
+    seed: 7,
+    appearDelay: 140,
+    meta: "3 projects",
+  },
+  Achievements: {
+    art: "verdant",
+    seed: 11,
+    appearDelay: 280,
+    meta: "3 achievements",
+  },
+};
 
 type GitHubDay = {
   date: string;
@@ -456,18 +481,48 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-12 grid gap-8 justify-items-center lg:grid-cols-3 lg:items-start">
-            {folderData.map((folder) => (
-              <AnimatedFolder
-                key={folder.title}
-                title={folder.title}
-                projects={folder.projects}
-                className="w-full max-w-[360px]"
-                selectedProjectId={selectedFile?.project.id ?? null}
-                onSelectProject={handleSelectProject}
-              />
-            ))}
+          <div className="mt-12 grid gap-10 justify-items-center lg:grid-cols-3 lg:items-start">
+            {folderData.map((folder) => {
+              const config = folderConfigs[folder.title] || {
+                art: "aurora" as ArtPreset,
+                seed: 1,
+                appearDelay: 0,
+                meta: `${folder.projects.length} items`,
+              };
+
+              const files: FolderFile[] = folder.projects.map((proj) => ({
+                name: proj.title,
+                meta: proj.tags.slice(0, 2).join(" · "),
+                image: proj.image,
+                selected: selectedFile?.project.id === proj.id,
+              }));
+
+              return (
+                <div key={folder.title} className="flex flex-col items-center">
+                  <GlassFolder
+                    label={folder.title}
+                    meta={config.meta}
+                    art={config.art}
+                    seed={config.seed}
+                    appearDelay={config.appearDelay}
+                    action="none"
+                    files={files}
+                    width={330}
+                    onFileSelect={(_, index) => {
+                      const proj = folder.projects[index];
+                      if (proj) {
+                        handleSelectProject(proj, folder.title);
+                      }
+                    }}
+                  />
+                </div>
+              );
+            })}
           </div>
+
+          <p className="mt-8 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+            Hover to lean · Click folder to open · Click a file to view details
+          </p>
 
           <div className="mt-12">
             <div
@@ -641,7 +696,7 @@ export default function Home() {
               i&apos;m a computer science undergrad at IIIT Naya Raipur who just likes building and shipping stuff with a product mindset. i specialize in working with backend, production AI (agents, pipelines, RAG) stuff with the goal of shipping.
             </p>
             <p className="mt-4">
-              i love to work in a fast paced environment, spending nights on caffeine sfihipping and fixing stuff. 
+              i love to work in a fast paced environment, spending nights on caffeine shipping and fixing stuff. 
             </p>
             <p className="mt-4">
               aside from my tech side, i love to spend my free time creating art.

@@ -35,6 +35,20 @@ const folderData: { title: string; projects: Project[] }[] = [
     title: "Open Source Contributions",
     projects: [
       {
+        id: "osc-5",
+        image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80",
+        title: "ParadeDB: max_expansions for Fuzzy Search",
+        summary: "Open Source Contribution | Rust, PostgreSQL (pgrx), Tantivy | Nov 2026",
+        details: `
+• Added \`max_expansions\` to ParadeDB's fuzzy search (\`pdb.fuzzy\`), capping each fuzzy term at the 50 closest matches by default (same as Elasticsearch/Lucene) to prevent query blow-up.
+• Implemented bounded-heap top-k term selection in ParadeDB's Tantivy fork, so only the closest candidate terms are kept as the term dictionary is walked.
+• Bit-packed the new option into a Postgres typmod while keeping previously stored values readable, preserving backward compatibility.
+• Covered the change with proptest property tests, pg_regress and integration tests, reaching 95% patch coverage; PRs open across ParadeDB and its Tantivy fork.
+`,
+        highlights: [],
+        tags: ["Rust", "PostgreSQL", "Tantivy", "Search"],
+      },
+      {
         id: "osc-4",
         image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&q=80",
         title: "Onyx : GitLab Connector Branch Support",

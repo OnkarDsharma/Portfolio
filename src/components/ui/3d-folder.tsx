@@ -30,16 +30,21 @@ interface ProjectCardProps {
   delay: number;
   isVisible: boolean;
   index: number;
+  total: number;
   onClick: () => void;
   isSelected: boolean;
 }
 
+const MAX_VISIBLE_CARDS = 5;
+
 const ProjectCard = forwardRef<HTMLDivElement, ProjectCardProps>(function ProjectCard(
-  { image, title, delay, isVisible, index, onClick, isSelected },
+  { image, title, delay, isVisible, index, total, onClick, isSelected },
   ref,
 ) {
-  const rotations = [-18, -6, 6, 18];
-  const translations = [-75, -25, 25, 75];
+  // Fan cards symmetrically; tighten spacing when there are more than 4.
+  const offset = index - (total - 1) / 2;
+  const spacing = total > 4 ? 40 : 50;
+  const tilt = total > 4 ? 9 : 12;
 
   return (
     <div
@@ -51,7 +56,7 @@ const ProjectCard = forwardRef<HTMLDivElement, ProjectCardProps>(function Projec
       )}
       style={{
         transform: isVisible
-          ? `translateY(-90px) translateX(${translations[index]}px) rotate(${rotations[index]}deg) scale(1)`
+          ? `translateY(-90px) translateX(${offset * spacing}px) rotate(${offset * tilt}deg) scale(1)`
           : "translateY(0px) translateX(0px) rotate(0deg) scale(0.5)",
         opacity: isSelected ? 0 : isVisible ? 1 : 0,
         transition: `all 600ms cubic-bezier(0.34, 1.56, 0.64, 1) ${delay}ms`,
@@ -145,7 +150,7 @@ export function AnimatedFolder({
               zIndex: 20,
             }}
           >
-            {projects.slice(0, 4).map((project, index) => (
+            {projects.slice(0, MAX_VISIBLE_CARDS).map((project, index) => (
               <ProjectCard
                 key={project.id}
                 image={project.image}
@@ -153,6 +158,7 @@ export function AnimatedFolder({
                 delay={index * 80}
                 isVisible={isHovered}
                 index={index}
+                total={Math.min(projects.length, MAX_VISIBLE_CARDS)}
                 onClick={() => handleProjectClick(project)}
                 isSelected={selectedProjectId === project.id}
               />

@@ -22,6 +22,8 @@ interface AnimatedFolderProps {
   className?: string;
   selectedProjectId?: string | null;
   onSelectProject?: (project: Project, folderTitle: string) => void;
+  /** Phones and touch screens: tapping the folder opens its first file. */
+  onOpenFolder?: (folderTitle: string) => void;
 }
 
 interface ProjectCardProps {
@@ -50,7 +52,7 @@ const ProjectCard = forwardRef<HTMLDivElement, ProjectCardProps>(function Projec
     <div
       ref={ref}
       className={cn(
-        "absolute h-28 w-20 overflow-hidden rounded-lg border border-border bg-card shadow-xl",
+        "absolute hidden h-28 w-20 overflow-hidden md:block rounded-lg border border-border bg-card shadow-xl",
         "cursor-pointer hover:ring-2 hover:ring-accent/50",
         isSelected && "opacity-0",
       )}
@@ -90,6 +92,7 @@ export function AnimatedFolder({
   className,
   selectedProjectId = null,
   onSelectProject,
+  onOpenFolder,
 }: AnimatedFolderProps) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -97,16 +100,22 @@ export function AnimatedFolder({
     onSelectProject?.(project, title);
   };
 
+  const handleFolderClick = () => {
+    if (window.matchMedia("(hover: none), (max-width: 767px)").matches) {
+      onOpenFolder?.(title);
+    }
+  };
+
   return (
     <div className={cn("w-full", className)}>
       <div
         className={cn(
-          "group glass glass-hover flex min-h-[390px] flex-col items-center justify-center rounded-3xl p-8 cursor-pointer transition-all duration-500 ease-out",
+          "group soft-card flex h-full min-h-[215px] flex-col items-center justify-center rounded-3xl p-3 pb-9 md:min-h-[390px] md:min-w-[240px] md:p-8 cursor-pointer transition-all duration-500 ease-out",
         )}
         style={{
-          minWidth: "240px",
           perspective: "1000px",
         }}
+        onClick={handleFolderClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -118,7 +127,7 @@ export function AnimatedFolder({
           }}
         />
 
-        <div className="relative mb-8 flex scale-125 items-center justify-center" style={{ height: "160px", width: "200px" }}>
+        <div className="relative -mb-3 -mt-3 flex shrink-0 scale-[0.7] md:mb-8 md:mt-0 md:scale-125 items-center justify-center" style={{ height: "160px", width: "200px" }}>
           <div
             className="absolute h-24 w-32 rounded-lg bg-folder-back shadow-md"
             style={{
@@ -190,7 +199,7 @@ export function AnimatedFolder({
         </div>
 
         <h3
-          className="mt-4 text-center text-xl font-semibold text-foreground transition-all duration-300"
+          className="text-center text-base leading-snug md:mt-4 md:text-xl font-semibold text-foreground transition-all duration-300"
           style={{
             transform: isHovered ? "translateY(4px)" : "translateY(0)",
           }}
@@ -200,7 +209,7 @@ export function AnimatedFolder({
 
         {title === "Projects" && (
           <p
-            className="text-sm text-muted-foreground transition-all duration-300"
+            className="hidden text-sm text-muted-foreground md:block transition-all duration-300"
             style={{
               opacity: isHovered ? 0.7 : 1,
             }}
@@ -210,13 +219,16 @@ export function AnimatedFolder({
         )}
 
         <div
-          className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 text-xs text-muted-foreground transition-all duration-300"
+          className="absolute bottom-3 left-1/2 flex w-max md:bottom-4 -translate-x-1/2 items-center gap-1.5 text-xs text-muted-foreground transition-all duration-300"
           style={{
             opacity: isHovered ? 0 : 0.6,
             transform: isHovered ? "translateY(10px)" : "translateY(0)",
           }}
         >
-          <span>{selectedProjectId ? "Selected file opens below" : "Hover to explore"}</span>
+          <span className="md:hidden">Tap to open</span>
+          <span className="hidden md:inline">
+            {selectedProjectId ? "Selected file opens below" : "Hover to explore"}
+          </span>
         </div>
       </div>
     </div>

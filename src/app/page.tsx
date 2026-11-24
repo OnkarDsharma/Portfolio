@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import SakuraEditorialPoster from "@/components/ui/sakura-editorial-poster";
 import { AnimatedFolder, type Project } from "@/components/ui/3d-folder";
@@ -274,7 +274,13 @@ function buildContributionGrid(cells: GitHubDay[]) {
     }
   });
 
-  return { grid, monthLabels };
+  // Drop a label when the next month starts too close for both to fit.
+  const spacedLabels = monthLabels.filter((month, index) => {
+    const next = monthLabels[index + 1];
+    return !next || next.col - month.col >= 3;
+  });
+
+  return { grid, monthLabels: spacedLabels };
 }
 
 type SelectedFile = {
@@ -284,6 +290,8 @@ type SelectedFile = {
 
 export default function Home() {
   const [selectedFile, setSelectedFile] = useState<SelectedFile>(null);
+  const contributionsRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const [githubStats, setGithubStats] = useState<GitHubContributionResponse | null>(null);
 
   useEffect(() => {
@@ -297,6 +305,12 @@ export default function Home() {
         setGithubStats({ total: 0, cells: [] });
       });
   }, []);
+
+  // On narrow screens the grid scrolls sideways; start at the most recent weeks.
+  useEffect(() => {
+    const el = contributionsRef.current;
+    if (githubStats && el) el.scrollLeft = el.scrollWidth;
+  }, [githubStats]);
 
   const contributionData = githubStats ? buildContributionGrid(githubStats.cells) : { grid: Array.from({ length: 7 }, () => Array.from({ length: 56 }, () => 0)), monthLabels: [] };
 
@@ -406,6 +420,19 @@ export default function Home() {
     });
   };
 
+  const openFolder = folderData.find((folder) => folder.title === selectedFile?.folderTitle);
+
+  const handleOpenFolder = (folderTitle: string) => {
+    const folder = folderData.find((item) => item.title === folderTitle);
+    if (!folder?.projects.length) return;
+
+    setSelectedFile({ folderTitle, project: folder.projects[0] });
+    requestAnimationFrame(() => {
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      panelRef.current?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    });
+  };
+
   return (
     <main className="min-h-screen">
       <SakuraEditorialPoster
@@ -421,12 +448,12 @@ export default function Home() {
         className="w-full"
       />
 
-      <section className="relative mx-4 my-6 overflow-hidden rounded-[2rem] border border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-24 md:mx-8 md:py-32 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
+      <section className="relative mx-2 my-4 sm:mx-4 sm:my-6 overflow-hidden rounded-[2rem] border border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-24 md:mx-8 md:py-32 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
         <div className="absolute inset-x-0 top-0 h-px bg-black/10" />
         <div className="absolute inset-x-0 bottom-0 h-px bg-black/10" />
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="-mt-24 mb-16 flex items-start justify-between gap-8">
-            <div className="ml-[clamp(0rem,4vw,3rem)] mt-8 max-w-[min(100%,34rem)] rounded-[2rem] border border-[#d8b48b]/70 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] p-7 shadow-[0_20px_60px_rgba(60,40,20,0.08)] md:p-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="-mt-24 mb-16 flex flex-col items-center justify-between gap-0 md:flex-row md:items-start md:gap-8">
+            <div className="mt-8 max-w-[min(100%,34rem)] rounded-[2rem] md:ml-[clamp(0rem,4vw,3rem)] border border-[#d8b48b]/70 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] p-6 shadow-[0_20px_60px_rgba(60,40,20,0.08)] md:p-10">
               <p className="font-['Cormorant_Garamond'] text-4xl leading-none text-[#cf7a2a] md:text-5xl">
                 tldr;
               </p>
@@ -450,7 +477,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mr-[clamp(0rem,4vw,3rem)] hidden shrink-0 self-start md:mt-12 md:block lg:mt-16">
+            <div className="order-first mt-10 shrink-0 md:order-none md:mr-[clamp(0rem,4vw,3rem)] md:mt-12 md:self-start lg:mt-16">
               <div className="rounded-full border border-[#d8b48b]/80 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] p-2 shadow-[0_20px_60px_rgba(60,40,20,0.08)]">
                 <div
                   className="relative h-36 w-36 overflow-hidden rounded-full border border-white/80 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.92),rgba(246,219,199,0.88)_48%,rgba(215,143,108,0.92))] md:h-48 md:w-48 lg:h-52 lg:w-52"
@@ -466,7 +493,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="mt-6 flex justify-center">
+              <div className="mt-5 flex justify-center md:mt-6">
                 <a href="/Onkareshwar_Sharma_Resume.pdf" download>
                   <OriginButton className="h-12 rounded-full border-[0.5px] border-[#d8b48b]/80 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] px-6 text-base font-medium tracking-[0.12em] shadow-[0_18px_38px_-24px_rgba(60,40,20,0.35)] hover:brightness-105 dark:bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)]">
                     Resume
@@ -476,9 +503,8 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="relative isolate mt-12 2xl:-mx-20">
-          <div className="glass-backdrop" aria-hidden="true" />
-          <div className="grid gap-8 justify-items-center md:grid-cols-2 xl:grid-cols-4 xl:items-start xl:gap-5">
+          <div className="mt-20 md:mt-40 2xl:-mx-20">
+          <div className="relative z-10 grid grid-cols-2 gap-3 justify-items-center md:gap-8 xl:grid-cols-4 xl:items-start xl:gap-5">
             {folderData.map((folder) => (
               <AnimatedFolder
                 key={folder.title}
@@ -487,28 +513,57 @@ export default function Home() {
                 className="w-full max-w-[360px]"
                 selectedProjectId={selectedFile?.project.id ?? null}
                 onSelectProject={handleSelectProject}
+                onOpenFolder={handleOpenFolder}
               />
             ))}
           </div>
 
-          <div className="mt-12">
+          <div ref={panelRef} className="relative isolate mt-6 scroll-mt-4 md:mt-12">
             <div
-              className="glass overflow-hidden rounded-[2rem] transition-all duration-500"
+              className="glass-backdrop transition-opacity duration-500"
+              style={{ opacity: selectedFile ? 1 : 0 }}
+              aria-hidden="true"
+            />
+            <div
+              className={`glass overflow-hidden rounded-[1.5rem] transition-all duration-500 md:rounded-[2rem] ${
+                selectedFile ? "max-h-[4000px] md:max-h-[min(80vh,880px)]" : "max-h-0"
+              }`}
               style={{
-                maxHeight: selectedFile ? "min(80vh, 880px)" : "0px",
                 opacity: selectedFile ? 1 : 0,
                 transform: selectedFile ? "translateY(0)" : "translateY(24px)",
                 pointerEvents: selectedFile ? "auto" : "none",
               }}
             >
               {selectedFile ? (
-                <div key={selectedFile.project.id} tabIndex={0} role="region" aria-label={selectedFile.project.title} className="flex max-h-[min(80vh,880px)] flex-col gap-5 overflow-y-auto rounded-[inherit] p-6 *:shrink-0 md:p-8 lg:p-10">
-                  <div className="flex items-start justify-between gap-4">
+                <>
+                {openFolder && openFolder.projects.length > 1 ? (
+                  <div className="hidden gap-2 overflow-x-auto p-4 pb-0 [scrollbar-width:none] max-md:flex [@media(hover:none)]:flex">
+                    {openFolder.projects.map((project) => {
+                      const isActive = project.id === selectedFile.project.id;
+
+                      return (
+                        <button
+                          key={project.id}
+                          type="button"
+                          aria-pressed={isActive}
+                          onClick={() => setSelectedFile({ folderTitle: openFolder.title, project })}
+                          className={`min-h-11 max-w-[13rem] shrink-0 truncate rounded-full px-4 text-sm ${
+                            isActive ? "bg-[#0b0d12] text-white" : "glass-inset text-black/70"
+                          }`}
+                        >
+                          {project.title}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : null}
+                <div key={selectedFile.project.id} tabIndex={0} role="region" aria-label={selectedFile.project.title} className="flex flex-col gap-5 rounded-[inherit] p-5 md:max-h-[min(80vh,880px)] md:overflow-y-auto *:shrink-0 md:p-8 lg:p-10">
+                  <div className="flex flex-col items-start justify-between gap-4 md:flex-row">
                     <div>
                       <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-black/65">
                         {selectedFile.folderTitle}
                       </p>
-                      <h3 className="mt-2 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
+                      <h3 className="mt-2 text-2xl font-semibold tracking-tight text-foreground md:text-4xl">
                         {selectedFile.project.title}
                       </h3>
                       <p className="mt-3 text-sm leading-6 text-black/65 md:text-base">
@@ -553,13 +608,14 @@ export default function Home() {
                     ))}
                   </div>
 
-                  <div className="glass-inset rounded-2xl p-6 md:p-8 pb-8">
+                  <div className="glass-inset rounded-2xl p-4 md:p-8">
                     <div className="text-sm leading-7 text-foreground/85 md:text-[0.98rem]">
                       {formatProjectDetails(selectedFile.project.details)}
                     </div>
                   </div>
 
                 </div>
+                </>
               ) : null}
             </div>
           </div>
@@ -567,9 +623,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative mx-4 my-6 overflow-hidden rounded-[2rem] border border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-20 md:mx-8 md:py-24 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="relative pl-4 md:pl-6">
+      <section className="relative mx-2 my-4 sm:mx-4 sm:my-6 overflow-hidden rounded-[2rem] border border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-12 md:mx-8 md:py-24 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="relative md:pl-6">
             <p className="text-[2.3rem] font-semibold tracking-[-0.06em] text-[#111827] md:text-[4rem]">
               github contributions
             </p>
@@ -580,24 +636,13 @@ export default function Home() {
               <p className="text-[1.1rem] font-medium text-white/90 md:text-[1.5rem]">
                 {githubStats ? `${githubStats.total.toLocaleString()} contributions in the last year` : "Loading contributions..."}
               </p>
-              <button className="rounded-md border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/80 transition hover:bg-white/10">
+              <button className="hidden rounded-md border border-white/10 bg-white/5 sm:block px-3 py-1 text-xs font-medium text-white/80 transition hover:bg-white/10">
                 Contribution settings ▾
               </button>
             </div>
 
-            <div className="flex items-start gap-2 pb-3 pl-3 text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 md:gap-4">
-              <div className="w-8 shrink-0" />
-              <div className="grid flex-1 grid-cols-12 gap-1.5 md:gap-2">
-                {contributionData.monthLabels.map((month) => (
-                  <span key={`${month.label}-${month.col}`} className="text-center" style={{ gridColumnStart: month.col + 1 }}>
-                    {month.label}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex gap-3 overflow-x-auto pb-2">
-              <div className="flex flex-col gap-1 pt-1 text-[10px] font-medium text-white/45">
+            <div ref={contributionsRef} className="flex gap-3 overflow-x-auto pb-2">
+              <div className="sticky left-0 z-10 flex flex-col justify-around bg-[#0d1117] pb-2 pr-1 pt-8 text-[10px] font-medium text-white/45">
                 {weekdayLabels.map((day) => (
                   <span key={day} className="h-4 leading-4">
                     {day}
@@ -605,7 +650,17 @@ export default function Home() {
                 ))}
               </div>
 
-              <div className="flex-1 overflow-hidden rounded-xl border border-white/5 bg-white/2 px-2 py-2">
+              <div className="min-w-[46rem] flex-1 overflow-hidden rounded-xl border border-white/5 bg-white/2 px-2 py-2">
+                <div
+                  className="mb-2 grid h-4 text-[10px] font-medium uppercase tracking-[0.12em] text-white/50"
+                  style={{ gridTemplateColumns: `repeat(${contributionData.grid[0].length}, minmax(0, 1fr))`, gap: "3px" }}
+                >
+                  {contributionData.monthLabels.map((month) => (
+                    <span key={`${month.label}-${month.col}`} className="row-start-1 whitespace-nowrap" style={{ gridColumnStart: month.col + 1 }}>
+                      {month.label}
+                    </span>
+                  ))}
+                </div>
                 <div className="grid" style={{ gridTemplateColumns: `repeat(${contributionData.grid[0].length}, minmax(0, 1fr))`, gap: "3px" }}>
                   {contributionData.grid.map((row, rowIndex) =>
                     row.map((level, colIndex) => {
@@ -651,9 +706,9 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative mx-4 my-6 overflow-hidden rounded-[2rem] border border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-20 md:mx-8 md:py-24 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="relative pl-4 md:pl-6">
+      <section className="relative mx-2 my-4 sm:mx-4 sm:my-6 overflow-hidden rounded-[2rem] border border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-12 md:mx-8 md:py-24 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="relative md:pl-6">
             <p className="text-[2.5rem] font-semibold tracking-[-0.06em] text-[#111827] md:text-[4rem]">
               about me
             </p>
@@ -674,7 +729,7 @@ export default function Home() {
       </section>
 
       <section className="relative overflow-hidden border-x border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] pb-28 pt-8 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
-        <div className="mx-auto max-w-6xl px-6">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="relative border-t border-black/10 pt-6">
             <div className="flex flex-col items-center justify-center gap-5 pb-6 text-center text-[0.95rem] text-black/60 md:text-[1.1rem]">
               <p className="max-w-2xl text-[1.1rem] leading-7 text-black/70 md:text-[1.4rem]">

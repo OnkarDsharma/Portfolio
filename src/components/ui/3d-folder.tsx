@@ -104,7 +104,7 @@ export function AnimatedFolder({
           "group relative flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-border bg-card p-8 cursor-pointer transition-all duration-500 ease-out hover:border-accent/30 hover:shadow-2xl hover:shadow-accent/10",
         )}
         style={{
-          minWidth: "280px",
+          minWidth: "240px",
           perspective: "1000px",
         }}
         onMouseEnter={() => setIsHovered(true)}

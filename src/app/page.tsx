@@ -110,6 +110,24 @@ const folderData: { title: string; projects: Project[] }[] = [
     ],
   },
   {
+    title: "Experience",
+    projects: [
+      {
+        id: "exp-1",
+        image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
+        title: "BigBrick Technologies: Backend Developer Intern",
+        summary: "BigBrick Technologies Private Limited | Remote | Oct 2026 – Present",
+        details: `
+• Engineered TenderHub, a government procurement intelligence platform on Node.js, Express.js and MongoDB, with REST APIs and 4 core data models for tenders, contractors, AI dossiers and Copilot sessions.
+• Automated daily tender ingestion across 2 government procurement portals using Playwright/Puppeteer and PDF parsing to extract bid metadata and technical specifications; integrated Cloudflare R2 and Redis for document storage, caching, and rate limiting.
+• Built a 3-stage AI analysis pipeline (Gemini, GPT-4o mini fallback, deterministic rules) across 5 tender domains, generating BOQ estimates, compliance checks and eligibility assessments in under 60 seconds.
+`,
+        highlights: [],
+        tags: ["Node.js", "Express.js", "MongoDB", "Redis", "AI Pipeline"],
+      },
+    ],
+  },
+  {
     title: "Projects",
     projects: [
       
@@ -463,14 +481,14 @@ export default function Home() {
               Selected archive
             </p>
             <h2 className="mt-4 text-4xl font-semibold tracking-tight text-black/90 md:text-5xl">
-              Three folders, three chapters of the work.
+              Four folders, four chapters of the work.
             </h2>
             <p className="mt-4 max-w-xl text-base leading-7 text-black/60 md:text-lg">
               Scroll into the archive and open each folder to reveal the files inside.
             </p>
           </div>
 
-          <div className="mt-12 grid gap-8 justify-items-center lg:grid-cols-3 lg:items-start">
+          <div className="mt-12 grid gap-8 justify-items-center md:grid-cols-2 xl:grid-cols-4 xl:items-start xl:gap-5">
             {folderData.map((folder) => (
               <AnimatedFolder
                 key={folder.title}

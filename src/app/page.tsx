@@ -476,19 +476,9 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mx-auto max-w-2xl">
-            <p className="text-xs font-medium uppercase tracking-[0.35em] text-black/45">
-              Selected archive
-            </p>
-            <h2 className="mt-4 text-4xl font-semibold tracking-tight text-black/90 md:text-5xl">
-              Four folders, four chapters of the work.
-            </h2>
-            <p className="mt-4 max-w-xl text-base leading-7 text-black/60 md:text-lg">
-              Scroll into the archive and open each folder to reveal the files inside.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-8 justify-items-center md:grid-cols-2 xl:grid-cols-4 xl:items-start xl:gap-5">
+          <div className="relative isolate mt-12 2xl:-mx-20">
+          <div className="glass-backdrop" aria-hidden="true" />
+          <div className="grid gap-8 justify-items-center md:grid-cols-2 xl:grid-cols-4 xl:items-start xl:gap-5">
             {folderData.map((folder) => (
               <AnimatedFolder
                 key={folder.title}
@@ -503,7 +493,7 @@ export default function Home() {
 
           <div className="mt-12">
             <div
-              className="overflow-hidden rounded-[2rem] border border-black/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(248,244,238,0.98)_100%)] shadow-[0_26px_70px_rgba(40,20,20,0.12)] transition-all duration-500"
+              className="glass overflow-hidden rounded-[2rem] transition-all duration-500"
               style={{
                 maxHeight: selectedFile ? "min(80vh, 880px)" : "0px",
                 opacity: selectedFile ? 1 : 0,
@@ -512,16 +502,16 @@ export default function Home() {
               }}
             >
               {selectedFile ? (
-                <div className="flex flex-col gap-5 p-6 md:p-8 lg:p-10">
+                <div key={selectedFile.project.id} tabIndex={0} role="region" aria-label={selectedFile.project.title} className="flex max-h-[min(80vh,880px)] flex-col gap-5 overflow-y-auto rounded-[inherit] p-6 *:shrink-0 md:p-8 lg:p-10">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                      <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-black/65">
                         {selectedFile.folderTitle}
                       </p>
                       <h3 className="mt-2 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
                         {selectedFile.project.title}
                       </h3>
-                      <p className="mt-3 text-sm leading-6 text-muted-foreground md:text-base">
+                      <p className="mt-3 text-sm leading-6 text-black/65 md:text-base">
                         {selectedFile.project.summary}
                       </p>
                     </div>
@@ -556,14 +546,14 @@ export default function Home() {
                     {selectedFile.project.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full border border-border bg-muted px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground"
+                        className="glass-inset rounded-full px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-black/65"
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
 
-                  <div className="rounded-2xl border border-border bg-background/75 p-6 md:p-8 pb-8">
+                  <div className="glass-inset rounded-2xl p-6 md:p-8 pb-8">
                     <div className="text-sm leading-7 text-foreground/85 md:text-[0.98rem]">
                       {formatProjectDetails(selectedFile.project.details)}
                     </div>
@@ -572,6 +562,7 @@ export default function Home() {
                 </div>
               ) : null}
             </div>
+          </div>
           </div>
         </div>
       </section>

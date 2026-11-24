@@ -101,7 +101,7 @@ export function AnimatedFolder({
     <div className={cn("w-full", className)}>
       <div
         className={cn(
-          "group relative flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-border bg-card p-8 cursor-pointer transition-all duration-500 ease-out hover:border-accent/30 hover:shadow-2xl hover:shadow-accent/10",
+          "group glass glass-hover flex min-h-[390px] flex-col items-center justify-center rounded-3xl p-8 cursor-pointer transition-all duration-500 ease-out",
         )}
         style={{
           minWidth: "240px",
@@ -111,14 +111,14 @@ export function AnimatedFolder({
         onMouseLeave={() => setIsHovered(false)}
       >
         <div
-          className="absolute inset-0 rounded-2xl transition-opacity duration-500"
+          className="absolute inset-0 rounded-3xl transition-opacity duration-500"
           style={{
             background: "radial-gradient(circle at 50% 70%, var(--accent) 0%, transparent 70%)",
             opacity: isHovered ? 0.08 : 0,
           }}
         />
 
-        <div className="relative mb-4 flex items-center justify-center" style={{ height: "160px", width: "200px" }}>
+        <div className="relative mb-8 flex scale-125 items-center justify-center" style={{ height: "160px", width: "200px" }}>
           <div
             className="absolute h-24 w-32 rounded-lg bg-folder-back shadow-md"
             style={{
@@ -190,7 +190,7 @@ export function AnimatedFolder({
         </div>
 
         <h3
-          className="mt-4 text-lg font-semibold text-foreground transition-all duration-300"
+          className="mt-4 text-center text-xl font-semibold text-foreground transition-all duration-300"
           style={{
             transform: isHovered ? "translateY(4px)" : "translateY(0)",
           }}

@@ -37,7 +37,7 @@ const folderData: { title: string; projects: Project[] }[] = [
       {
         id: "osc-5",
         image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80",
-        title: "ParadeDB: max_expansions for Fuzzy Search",
+        title: "ParadeDB (YCS23): max_expansions for Fuzzy Search",
         summary: "Open Source Contribution | Rust, PostgreSQL (pgrx), Tantivy | Nov 2026",
         details: `
 • Added \`max_expansions\` to ParadeDB's fuzzy search (\`pdb.fuzzy\`), capping each fuzzy term at the 50 closest matches by default (same as Elasticsearch/Lucene) to prevent query blow-up.
@@ -51,7 +51,7 @@ const folderData: { title: string; projects: Project[] }[] = [
       {
         id: "osc-4",
         image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800&q=80",
-        title: "Onyx : GitLab Connector Branch Support",
+        title: "Onyx (YCW24): GitLab Connector Branch Support",
         summary: "Open Source Contribution | Python, GitLab API | PR #12676",
         details: `
 • Added configurable branch support to Onyx's GitLab connector, letting it sync from any branch instead of only the repo's default, with zero config change required for existing users.
@@ -65,7 +65,7 @@ const folderData: { title: string; projects: Project[] }[] = [
       {
         id: "osc-1",
         image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
-        title: "GrowthBook: API Support for Posting Experiment Comments",
+        title: "GrowthBook (YCW22): API Support for Posting Experiment Comments",
         summary: "Open Source Contribution | TypeScript, Node.js, REST API | PR #6526",
         details: `
 • Built a new public REST API endpoint (\`POST /experiments/:id/comment\`) enabling programmatic comment posting on experiments, previously only possible through the UI.
@@ -80,7 +80,7 @@ const folderData: { title: string; projects: Project[] }[] = [
       {
         id: "osc-2",
         image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
-        title: "GrowthBook: Fix Pagination Bug in Saved Groups Search",
+        title: "GrowthBook (YCW22): Fix Pagination Bug in Saved Groups Search",
         summary: "Open Source Contribution | TypeScript, React | PR #6904",
         details: `
 • Diagnosed and fixed a bug in Saved Groups' ID List page where searching returned no results if the user was on any page other than page 1.

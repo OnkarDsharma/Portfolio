@@ -522,7 +522,7 @@ export default function Home() {
         <div className="absolute inset-x-0 top-0 h-px bg-black/10 dark:bg-white/10" />
         <div className="absolute inset-x-0 bottom-0 h-px bg-black/10 dark:bg-white/10" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="-mt-24 mb-16 flex flex-col items-center justify-between gap-0 md:flex-row md:items-start md:gap-8">
+          <div className="-mt-12 mb-16 flex flex-col items-center justify-between gap-0 md:flex-row md:items-start md:gap-8">
             <div className="mt-8 max-w-[min(100%,34rem)] rounded-[2rem] md:ml-[clamp(0rem,4vw,3rem)] border border-[#d8b48b]/70 dark:border-[#e8a565]/25 cream-surface p-6 shadow-[0_20px_60px_rgba(60,40,20,0.08)] md:p-10">
               <p className="font-['Cormorant_Garamond'] text-4xl leading-none text-[#cf7a2a] md:text-5xl">
                 tldr;

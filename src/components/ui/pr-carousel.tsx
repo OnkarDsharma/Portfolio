@@ -58,7 +58,7 @@ export function PrCarousel({ prs, renderDetails }: PrCarouselProps) {
   };
 
   const arrowClass =
-    "inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-[#0b0d12] text-white dark:border-white/10 dark:bg-[#f3e6d8] dark:text-[#1a1512] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-30";
+    "inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-black/10 bg-[#0b0d12] text-white dark:border-white/10 dark:bg-[#f3e6d8] dark:text-[#1a1512] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-30";
 
   return (
     <div
@@ -127,7 +127,7 @@ export function PrCarousel({ prs, renderDetails }: PrCarouselProps) {
                 onClick={() => go(i)}
                 aria-label={`Show PR #${item.number}`}
                 aria-current={i === index}
-                className="flex h-6 w-6 items-center justify-center"
+                className="flex h-6 w-6 cursor-pointer items-center justify-center"
               >
                 <span
                   className={`block h-2 rounded-full transition-all ${

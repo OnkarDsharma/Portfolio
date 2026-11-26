@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import SakuraEditorialPoster from "@/components/ui/sakura-editorial-poster";
 import { AnimatedFolder, type Project } from "@/components/ui/3d-folder";
 import { OriginButton } from "@/components/ui/origin-button";
+import { PrCarousel } from "@/components/ui/pr-carousel";
 
 function GitHubIcon() {
   return (
@@ -38,21 +39,91 @@ const folderData: { title: string; projects: Project[] }[] = [
         id: "osc-growthbook",
         image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
         title: "GrowthBook (YCW22)",
-        summary: "Open Source Contribution | TypeScript, Node.js, React, REST API | 5 PRs",
-        details: `
-• Built a new public REST API endpoint (\`POST /experiments/:id/comment\`) enabling programmatic comment posting on experiments, reusing the internal \`addComment\` logic so permissions, validation and data model match the UI exactly.
-• Fixed a Saved Groups bug where searching returned no results from any page other than page 1, by resetting pagination whenever the search filter changes (mirroring the existing sort-toggle behavior).
-• Added a configurable maximum number of goal metrics per experiment, and exposed \`ownerName\` in experiment API responses.
-• Regenerated OpenAPI specs, ran lint, type-check and test suites, and manually tested each change end-to-end against a local dev instance.
-`,
+        summary: "Open Source Contribution | 5 PRs: 2 merged, 1 closed, 2 open",
+        // Not shown: projects with `prs` render a per-PR carousel instead.
+        details: "",
+        repoUrl: "https://github.com/growthbook/growthbook",
         highlights: [],
         tags: ["TypeScript", "REST API", "React", "GrowthBook"],
         prs: [
-          { number: 7347, title: "feat: add configurable maximum number of goal metrics per experiment", status: "open", url: "https://github.com/growthbook/growthbook/pull/7347" },
-          { number: 6904, title: "fix(saved-groups): reset pagination to page 1 when search filter changes", status: "merged", url: "https://github.com/growthbook/growthbook/pull/6904" },
-          { number: 6526, title: "Add API support for posting experiment comments", status: "merged", url: "https://github.com/growthbook/growthbook/pull/6526" },
-          { number: 6469, title: "Add ownerName to experiment API responses", status: "open", url: "https://github.com/growthbook/growthbook/pull/6469" },
-          { number: 6596, title: "Add namespace info to Start Experiment modal summary", status: "closed", url: "https://github.com/growthbook/growthbook/pull/6596" },
+          {
+            number: 6526,
+            title: "Add API support for posting experiment comments",
+            status: "merged",
+            url: "https://github.com/growthbook/growthbook/pull/6526",
+            meta: "TypeScript, Node.js, REST API, OpenAPI | Merged Sep 2026 | +155 −1 across 7 files | Closes #6478",
+            tags: ["REST API", "Backend", "OpenAPI"],
+            details: `
+• Added a new public REST endpoint, \`POST /api/v1/experiments/:id/comment\`, so comments can be posted on experiments programmatically; before this it was only possible through the UI.
+• Reused the internal \`addComment\` service from \`back-end/src/services/discussions.ts\`, so the API applies the same \`canAddComment\` permission check, data model and validation as the UI's comment feature, with no duplicated business logic.
+• Registered the route in \`experiments.router.ts\` and added a request validator in \`shared/src/validators/experiments.ts\`, so empty comments are rejected with a clear validation error and unknown experiment IDs return "Could not find experiment with that id" instead of crashing.
+• Regenerated the OpenAPI spec (\`pnpm generate-openapi\`) and added the API docs page, so the endpoint shows up in GrowthBook's public API reference.
+• Tested end-to-end against a local dev instance: comments appear instantly in the UI attributed to the API key's user; lint, type-check and Prettier all pass.
+• Kept the scope to this repo and left MCP support as a follow-up, since GrowthBook's MCP server lives in a separate repo and generates its bindings from this OpenAPI spec.
+`,
+          },
+          {
+            number: 6904,
+            title: "fix(saved-groups): reset pagination to page 1 when search filter changes",
+            status: "merged",
+            url: "https://github.com/growthbook/growthbook/pull/6904",
+            meta: "TypeScript, React | Merged Sep 2026 | 1-line fix in saved-groups/[sgid].tsx | Fixes #6889",
+            tags: ["React", "Frontend", "Bug Fix"],
+            details: `
+• Fixed a bug on the Saved Groups "ID List" page where a search returned no results if the user was on any page other than page 1.
+• Root cause: the table paginates client-side (\`NUM_PER_PAGE = 10\`) and filters correctly on every keystroke, but \`currentPage\` never reset, so the filtered array was sliced at a stale offset (e.g. \`slice(10, 20)\` on 3 matches) and came back empty.
+• Fix: call \`setCurrentPage(1)\` in the search input's \`onChange\`, matching how the sort-order toggle in the same file already resets pagination.
+• Verified with a 75-item list (8 pages): searching from page 2 and page 8 now finds matches in both directions, and search on page 1 plus sort + search together still work.
+• Confirmed the Enterprise \`hasLargeSavedGroupFeature\` flag only affects a warning banner, so the fix applies on every plan.
+• Ran lint, type-check and the test suite, and used \`git stash\` to show 33 failing \`RampMonitoringSignals\` tests also fail on unmodified \`main\`, so they're unrelated.
+`,
+          },
+          {
+            number: 6596,
+            title: "Add namespace info to Start Experiment modal summary",
+            status: "closed",
+            url: "https://github.com/growthbook/growthbook/pull/6596",
+            meta: "TypeScript, React | Closed Oct 2026 | +20 across StartExperimentModal.tsx | For #6594",
+            tags: ["React", "Frontend", "UX"],
+            details: `
+• Added namespace targeting to the Summary section of the Start Experiment confirmation modal, which previously listed Traffic, Attribute Targeting, Saved Groups and Prerequisites but never mentioned namespaces.
+• Without it, users could review the pre-launch summary and later find their traffic was limited to a namespace range they had configured earlier.
+• Derived \`hasNamespace\`, \`namespaceName\` and \`namespaceCoverage\` from the experiment's latest phase using the existing \`getNamespaceDisplayData\` helper and \`useOrgSettings()\`, the same pattern used in \`TrafficAllocationFunnel.tsx\`.
+• Rendered a conditional "Namespace" \`SummaryRow\` right after Traffic, shown only when a namespace is set (e.g. "test-adding-namespace (57%)").
+• Front-end only, with no backend or schema changes; tested both the with- and without-namespace cases locally, and type-check, ESLint and Prettier pass.
+`,
+          },
+          {
+            number: 7347,
+            title: "feat: add configurable maximum number of goal metrics per experiment",
+            status: "open",
+            url: "https://github.com/growthbook/growthbook/pull/7347",
+            meta: "TypeScript, React, Node.js | Opened Oct 2026 | +431 −6 across 22 files | Closes #7317",
+            tags: ["Full Stack", "Validation", "Testing"],
+            details: `
+• Added an organization setting, \`maxGoalMetricsPerExperiment\`, so teams can cap how many goal metrics an experiment tracks, which helps avoid false discoveries from having too many primary outcomes.
+• Added the setting under Settings → General → Experiment Settings (empty or 0 means unlimited) and exposed it in the REST settings API and the OpenAPI spec.
+• Enforced the limit in the UI: \`MetricsSelector\` and \`ExperimentMetricsSelector\` disable extra options with "(Maximum of X reached)", and the New Experiment, Edit Metrics and Analysis Settings forms block over-limit submissions.
+• Wrote a shared \`validateMaxGoalMetrics(settings, goalMetrics, experimentType)\` and enforced it in \`ExperimentModel\` create/update, the internal controllers, and the public \`POST /api/v1/experiments\`, \`/api/v2/experiments\` and \`/api/v1/experiments/:id\` endpoints.
+• Kept the existing rules: multi-armed bandits still need exactly one decision metric, holdouts are exempt, and secondary and guardrail metrics stay unlimited.
+• Added unit tests for the validator (unlimited, 0, undefined and negative limits across experiment types) and REST API tests that over-limit creates and updates are rejected.
+`,
+          },
+          {
+            number: 6469,
+            title: "Add ownerName to experiment API responses",
+            status: "open",
+            url: "https://github.com/growthbook/growthbook/pull/6469",
+            meta: "TypeScript, Node.js, REST API | Opened Jul 2026 | +83 −45 across 4 files | Fixes #6435",
+            tags: ["REST API", "Backend", "Caching"],
+            details: `
+• Added the owner's display name (\`ownerName\`) to experiment API responses alongside the raw \`owner\` user ID and \`ownerEmail\`, so the GrowthBook MCP server can show a readable creator instead of an ID.
+• Changed the owner-info cache and resolver in \`services/owner.ts\` to store \`{ email, name }\` per user instead of just the email, so both fields come from a single lookup.
+• Added \`ownerNameField\` next to \`ownerEmailField\` in the shared validators, added \`ownerName\` to \`apiExperimentShape\`, and regenerated the OpenAPI spec.
+• Kept both fields optional: they're only filled when the owner resolves to a known user, and \`ownerName\` may be missing even when \`ownerEmail\` is present, since names are optional.
+• Extended the owner service tests to cover \`ownerName\`, including users with no name, and checked that \`GET /experiments\` and \`GET /experiments/{id}\` return it.
+`,
+          },
         ],
       },
       {
@@ -588,56 +659,28 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-2">
-                    {selectedFile.project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="glass-inset rounded-full px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-black/65"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="glass-inset rounded-2xl p-4 md:p-8">
-                    <div className="text-sm leading-7 text-foreground/85 md:text-[0.98rem]">
-                      {formatProjectDetails(selectedFile.project.details)}
-                    </div>
-                  </div>
-
                   {selectedFile.project.prs?.length ? (
-                    <div className="flex flex-col gap-3">
-                      <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-black/65">
-                        Pull Requests
-                      </p>
-                      <ul className="grid gap-3 sm:grid-cols-2">
-                        {selectedFile.project.prs.map((pr) => (
-                          <li key={pr.number}>
-                            <a
-                              href={pr.url}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="glass-inset relative flex h-full flex-col gap-2 rounded-2xl p-4 pr-24 transition hover:brightness-105"
-                            >
-                              <span
-                                className={`absolute right-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] ${
-                                  pr.status === "merged"
-                                    ? "bg-[#8250df] text-white"
-                                    : pr.status === "open"
-                                      ? "bg-[#1f883d] text-white"
-                                      : "bg-[#cf222e] text-white"
-                                }`}
-                              >
-                                {pr.status === "merged" ? "Merged" : pr.status === "open" ? "Open" : "Closed"}
-                              </span>
-                              <span className="text-xs font-medium text-black/55">#{pr.number}</span>
-                              <span className="text-sm font-medium leading-6 text-foreground">{pr.title}</span>
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
+                    <PrCarousel prs={selectedFile.project.prs} renderDetails={formatProjectDetails} />
+                  ) : (
+                    <>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedFile.project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="glass-inset rounded-full px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-black/65"
+                        >
+                          {tag}
+                        </span>
+                      ))}
                     </div>
-                  ) : null}
+
+                    <div className="glass-inset rounded-2xl p-4 md:p-8">
+                      <div className="text-sm leading-7 text-foreground/85 md:text-[0.98rem]">
+                        {formatProjectDetails(selectedFile.project.details)}
+                      </div>
+                    </div>
+                    </>
+                  )}
 
                 </div>
                 </>

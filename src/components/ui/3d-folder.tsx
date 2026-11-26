@@ -22,6 +22,10 @@ export interface PullRequest {
   title: string;
   status: "merged" | "open" | "closed";
   url: string;
+  /** One-line stack / date / diff summary shown under the title. */
+  meta: string;
+  details: string;
+  tags: string[];
 }
 
 interface AnimatedFolderProps {

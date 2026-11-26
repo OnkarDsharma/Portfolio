@@ -180,21 +180,15 @@ const folderData: { title: string; projects: Project[] }[] = [
         title: "BigBrick Technologies: Backend Developer Intern",
         summary: "BigBrick Technologies Private Limited | Remote | Oct 2026 – Present",
         details: `
-• Built TenderHub, a government procurement intelligence platform for contractors, on Node.js (Express 5), MongoDB (Mongoose) and Redis, with a React 19 + Vite frontend and a separate admin console.
-• Multi-portal scraping: wrote Playwright adapters for 7 NIC eProcurement portals (Jammu & Kashmir, Punjab, Himachal Pradesh, Ladakh, Haryana, Delhi, PMGSY rural roads) plus the GeM marketplace, all behind one \`TenderSourceAdapter\` interface, and made the J&K crawl twice as fast.
-• Captcha solving: portal captchas go through a chain of solvers: a Hugging Face vision model, then a local Tesseract OCR step (Sharp strips the noise dots, binarizes and upscales the image, ~280 ms, no API cost), then Gemini Vision as a last fallback, with up to 10 retries.
-• Reliable crawling: full crawls save a checkpoint (department, page, last tender) and resume after interruption; daily crawls stop after 5 already-seen tenders in a row, and a unique \`{ sourcePortal, sourceTenderId }\` index keeps the database free of duplicates.
-• Scheduling: GitHub Actions runs a matrix job per state in 6 daily slots, with Playwright caching, a duplicate-run guard and failure-log uploads; two nightly jobs track tender status, and a reconciliation service flags tenders that departments cancelled or withdrew.
-• Document pipeline: NIT PDFs and BOQ archives are compressed with Ghostscript and stored in Cloudflare R2 under \`{dept}/{tenderId}_{date}/{file}\` keys, mirrored to a backup bucket in a second Cloudflare account; a retry queue re-fetches missing documents.
-• AI tender analysis: collects a tender's NIT, BOQ spreadsheet and work-item files, turns text PDFs into text and sends scanned ones to Gemini as files, then produces a pre-bid dossier with BOQ estimates, eligibility, compliance checks and milestones in under 60 seconds.
-• Multi-LLM layer: one provider interface over Gemini, DeepSeek, Claude and any OpenAI-compatible API, with a shared JSON-repair parser, per-run token and cost tracking, and an admin page that runs the same tender on several models side by side.
-• Contractor tools: a contractor-fit check compares a company profile only against thresholds the tender documents actually state, a bid-capacity score implements the CPWD / J&K PWD formula (A × N × 2 − B), and a Copilot chat answers questions about a tender, with per-user credits.
-• Alerts and payments: a matching engine checks new tenders against each contractor's saved filters and queues WhatsApp alerts through BullMQ; Razorpay checkout verifies payments both in the browser callback and in a signed server webhook.
-• Security and SEO: email OTP and Google OAuth sign-in with JWT cookies, role-based access, Redis rate limits and a bot shield with honeypots and IP blocklists; dynamic sitemaps, IndexNow pings and server-rendered pages for search crawlers so tender pages get indexed.
-• Covered the system with 20+ backend test suites (adapter parity, GeM PDF parsing, tender search indexes, dossier credits, abuse limits, SEO) and added structured Pino logging plus live crawl telemetry to the admin dashboard.
+• Built TenderHub, a government procurement intelligence platform for contractors, on Node.js, Express, MongoDB and Redis, with a React frontend and an admin console.
+• Wrote Playwright scrapers for 7 state tender portals plus the GeM marketplace, with captcha solving (OCR + vision-model fallback), resumable crawls and duplicate-free ingestion, scheduled 6 times a day on GitHub Actions.
+• Built a document pipeline that compresses tender PDFs with Ghostscript and stores them in Cloudflare R2, with a backup mirror and automatic re-fetching of missing files.
+• Built an AI analysis pipeline that reads a tender's documents and generates a pre-bid report (BOQ estimates, eligibility, compliance) in under 60 seconds, running on Gemini, DeepSeek or Claude with cost tracking.
+• Added WhatsApp tender alerts through BullMQ queues and Razorpay payments with webhook verification.
+• Secured the platform with JWT and Google sign-in, role-based access, rate limits and bot protection, and covered it with 20+ backend test suites.
 `,
         highlights: [],
-        tags: ["Node.js", "Express.js", "MongoDB", "Redis", "Playwright", "Cloudflare R2", "BullMQ", "LLMs"],
+        tags: ["Node.js", "MongoDB", "Redis", "Playwright", "Cloudflare R2", "LLMs"],
       },
     ],
   },

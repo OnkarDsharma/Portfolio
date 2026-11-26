@@ -84,8 +84,8 @@ const ProjectCard = forwardRef<HTMLDivElement, ProjectCardProps>(function Projec
       }}
     >
       <img src={image || "/placeholder.svg"} alt={title} className="h-full w-full object-cover" />
-      <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent" />
-      <p className="absolute bottom-1.5 left-1.5 right-1.5 truncate text-[10px] font-medium text-primary-foreground">
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+      <p className="absolute bottom-1.5 left-1.5 right-1.5 truncate text-[10px] font-medium text-white">
         {title}
       </p>
     </div>

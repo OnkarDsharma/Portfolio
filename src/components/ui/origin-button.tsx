@@ -288,7 +288,7 @@ const OriginButton = React.forwardRef<HTMLButtonElement, OriginButtonProps>(
         <span
           className={cn(
             "relative z-10 inline-flex items-center justify-center gap-2",
-            showFill ? "text-[#f8f3ec]" : "text-[#1d1d1d]",
+            showFill ? "text-[#f8f3ec] dark:text-[#171412]" : "text-[#1d1d1d] dark:text-[#f3ece4]",
           )}
         >
           {children}

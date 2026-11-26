@@ -312,7 +312,7 @@ function SakuraHeroVisual({
 
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-[35] bg-gradient-to-b from-transparent via-transparent to-[#f5f5f0]/18"
+        className="pointer-events-none absolute inset-0 z-[35] bg-gradient-to-b from-transparent via-transparent to-[#f5f5f0]/18 dark:to-[#1b1613]/30"
       />
     </div>
   );
@@ -517,7 +517,7 @@ export function SakuraEditorialPoster({
     <section
       ref={trackRef}
       className={cn(
-        "relative isolate w-full bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px]",
+        "relative isolate w-full dot-grid",
         fillViewport && "h-screen",
         className,
       )}
@@ -534,7 +534,7 @@ export function SakuraEditorialPoster({
         )}
         style={{ height: panelHeight }}
       >
-        <article className="@container relative flex h-full w-full min-h-0 flex-col overflow-hidden rounded-xl bg-[#f5f5f0] shadow-[0_24px_80px_rgba(80,50,50,0.12)]">
+        <article className="@container relative flex h-full w-full min-h-0 flex-col overflow-hidden rounded-xl bg-[#f5f5f0] shadow-[0_24px_80px_rgba(80,50,50,0.12)] dark:bg-[#1b1613] dark:shadow-[0_30px_90px_rgba(0,0,0,0.6)]">
           <div className="@container relative min-h-0 flex-1 overflow-hidden [container-type:size]">
             <SakuraHeroVisual
               title={title}

@@ -58,7 +58,7 @@ export function PrCarousel({ prs, renderDetails }: PrCarouselProps) {
   };
 
   const arrowClass =
-    "inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-[#0b0d12] text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-30";
+    "inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-[#0b0d12] text-white dark:border-white/10 dark:bg-[#f3e6d8] dark:text-[#1a1512] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-30";
 
   return (
     <div
@@ -85,7 +85,7 @@ export function PrCarousel({ prs, renderDetails }: PrCarouselProps) {
         </span>
 
         <div className="md:pr-28">
-          <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-black/65">
+          <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-black/65 dark:text-white/60">
             PR #{pr.number} · {index + 1} / {prs.length}
           </p>
           <h4 className="mt-2 text-xl font-semibold leading-snug tracking-tight text-foreground md:text-2xl">
@@ -93,19 +93,19 @@ export function PrCarousel({ prs, renderDetails }: PrCarouselProps) {
               href={pr.url}
               target="_blank"
               rel="noreferrer"
-              className="underline decoration-black/20 underline-offset-4 transition hover:decoration-black/60"
+              className="underline decoration-black/20 dark:decoration-white/25 underline-offset-4 transition hover:decoration-black/60 dark:hover:decoration-white/60"
             >
               {pr.title}
             </a>
           </h4>
-          <p className="mt-2 text-sm leading-6 text-black/65">{pr.meta}</p>
+          <p className="mt-2 text-sm leading-6 text-black/65 dark:text-white/60">{pr.meta}</p>
         </div>
 
         <div className="flex flex-wrap gap-2">
           {pr.tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full border border-black/10 bg-white/50 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-black/65"
+              className="rounded-full border border-black/10 bg-white/50 dark:border-white/10 dark:bg-white/[0.04] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-black/65 dark:text-white/60"
             >
               {tag}
             </span>
@@ -114,7 +114,7 @@ export function PrCarousel({ prs, renderDetails }: PrCarouselProps) {
 
         <div className="text-sm leading-7 text-foreground/85 md:text-[0.98rem]">{renderDetails(pr.details)}</div>
 
-        <div className="flex items-center justify-between gap-3 border-t border-black/10 pt-4">
+        <div className="flex items-center justify-between gap-3 border-t border-black/10 dark:border-white/10 pt-4">
           <button type="button" onClick={() => go(index - 1)} disabled={isFirst} aria-label="Previous pull request" className={arrowClass}>
             <ArrowIcon direction="left" />
           </button>
@@ -131,7 +131,7 @@ export function PrCarousel({ prs, renderDetails }: PrCarouselProps) {
               >
                 <span
                   className={`block h-2 rounded-full transition-all ${
-                    i === index ? `w-5 ${STATUS_STYLES[item.status].className}` : "w-2 bg-black/20"
+                    i === index ? `w-5 ${STATUS_STYLES[item.status].className}` : "w-2 bg-black/20 dark:bg-white/20"
                   }`}
                 />
               </button>

@@ -6,6 +6,7 @@ import SakuraEditorialPoster from "@/components/ui/sakura-editorial-poster";
 import { AnimatedFolder, type Project } from "@/components/ui/3d-folder";
 import { OriginButton } from "@/components/ui/origin-button";
 import { PrCarousel } from "@/components/ui/pr-carousel";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 function GitHubIcon() {
   return (
@@ -296,46 +297,39 @@ type GitHubContributionResponse = {
   cells: GitHubDay[];
 };
 
-const weekdayLabels = ["Mon", "Wed", "Fri"];
+type ContributionCell = { level: number; date: string } | null;
+
+// Level 0 (no contributions) is left empty, like the reference design; 1–4 go dark → bright green.
+const CONTRIBUTION_COLORS = ["transparent", "#0e4429", "#006d32", "#26a641", "#39d353"];
+
+const formatDay = (date: string) =>
+  new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }).format(new Date(date));
 
 function buildContributionGrid(cells: GitHubDay[]) {
   if (!cells.length) {
-    return { grid: Array.from({ length: 7 }, () => Array.from({ length: 1 }, () => 0)), monthLabels: [] };
+    return { grid: Array.from({ length: 7 }, () => Array.from({ length: 53 }, (): ContributionCell => null)), monthLabels: [] };
   }
 
-  const sorted = [...cells].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  const firstDate = new Date(sorted[0].date);
-  const lastDate = new Date(sorted[sorted.length - 1].date);
-  const totalDays = Math.max(1, Math.ceil((lastDate.getTime() - firstDate.getTime()) / 86400000) + 1);
-  const totalWeeks = Math.ceil(totalDays / 7);
-  const grid = Array.from({ length: 7 }, () => Array.from({ length: totalWeeks }, () => 0));
+  const sorted = [...cells].sort((a, b) => a.date.localeCompare(b.date));
+  // Dates are plain YYYY-MM-DD; read them as UTC so the weekday never shifts with the viewer's timezone.
+  const firstDate = new Date(`${sorted[0].date}T00:00:00Z`);
+  const lastDate = new Date(`${sorted[sorted.length - 1].date}T00:00:00Z`);
+  const startOffset = firstDate.getUTCDay();
+  const totalDays = Math.round((lastDate.getTime() - firstDate.getTime()) / 86400000) + 1;
+  const totalWeeks = Math.ceil((totalDays + startOffset) / 7);
+  const grid = Array.from({ length: 7 }, () => Array.from({ length: totalWeeks }, (): ContributionCell => null));
+  const monthLabels: { label: string; col: number }[] = [];
 
   sorted.forEach(({ date, level }) => {
-    const current = new Date(date);
-    const diffDays = Math.round((current.getTime() - firstDate.getTime()) / 86400000);
-    const row = current.getDay();
-    const col = Math.floor(diffDays / 7);
+    const current = new Date(`${date}T00:00:00Z`);
+    const dayIndex = Math.round((current.getTime() - firstDate.getTime()) / 86400000) + startOffset;
+    const col = Math.floor(dayIndex / 7);
+    grid[current.getUTCDay()][col] = { level, date };
 
-    if (row >= 0 && row < 7 && col >= 0 && col < totalWeeks) {
-      grid[row][col] = level;
-    }
-  });
-
-  const monthLabels: { label: string; col: number }[] = [];
-  const seenMonths = new Set<string>();
-
-  sorted.forEach(({ date }) => {
-    const parsed = new Date(date);
-    const monthKey = `${parsed.getFullYear()}-${parsed.getMonth()}`;
-    const diffDays = Math.round((parsed.getTime() - firstDate.getTime()) / 86400000);
-    const col = Math.floor(diffDays / 7);
-
-    if (!seenMonths.has(monthKey) && col >= 0 && col < totalWeeks) {
-      seenMonths.add(monthKey);
-      monthLabels.push({
-        label: new Intl.DateTimeFormat("en-US", { month: "short" }).format(parsed).toLowerCase(),
-        col,
-      });
+    // Label a month at the first week that contains its 1st day (and the very first week).
+    if (current.getUTCDate() === 1 || date === sorted[0].date) {
+      const label = new Intl.DateTimeFormat("en-US", { month: "short", timeZone: "UTC" }).format(current);
+      if (!monthLabels.some((m) => m.col === col)) monthLabels.push({ label, col });
     }
   });
 
@@ -377,7 +371,8 @@ export default function Home() {
     if (githubStats && el) el.scrollLeft = el.scrollWidth;
   }, [githubStats]);
 
-  const contributionData = githubStats ? buildContributionGrid(githubStats.cells) : { grid: Array.from({ length: 7 }, () => Array.from({ length: 56 }, () => 0)), monthLabels: [] };
+  const contributionData = buildContributionGrid(githubStats?.cells ?? []);
+  const weekCount = contributionData.grid[0].length;
 
   const formatProjectDetails = (text: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -402,7 +397,7 @@ export default function Home() {
                         href={part}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-[#8c5a2d] underline decoration-[#8c5a2d]/60 underline-offset-4 transition hover:text-[#6a431e]"
+                        className="text-[#8c5a2d] underline decoration-[#8c5a2d]/60 underline-offset-4 transition hover:text-[#6a431e] dark:text-[#f0b27a] dark:hover:text-[#f7c99c]"
                       >
                         {part}
                       </a>
@@ -416,7 +411,7 @@ export default function Home() {
                       <span key={`${part}-${index}`}>
                         {codeSplit.map((seg, si) =>
                           /`[^`]+`/.test(seg) ? (
-                            <code key={si} className="rounded bg-muted px-1 py-0.5 text-[0.92em] font-mono text-[#8c5a2d]">
+                            <code key={si} className="rounded bg-muted px-1 py-0.5 text-[0.92em] font-mono text-[#8c5a2d] dark:bg-white/[0.06] dark:text-[#f0b27a]">
                               {seg.replace(/`/g, "")}
                             </code>
                           ) : (
@@ -447,7 +442,7 @@ export default function Home() {
             href={part}
             target="_blank"
             rel="noreferrer"
-            className="text-[#8c5a2d] underline decoration-[#8c5a2d]/60 underline-offset-4 transition hover:text-[#6a431e]"
+            className="text-[#8c5a2d] underline decoration-[#8c5a2d]/60 underline-offset-4 transition hover:text-[#6a431e] dark:text-[#f0b27a] dark:hover:text-[#f7c99c]"
           >
             {part}
           </a>
@@ -460,7 +455,7 @@ export default function Home() {
           <span key={`${part}-${index}`}>
             {codeSplit.map((seg, si) =>
               /`[^`]+`/.test(seg) ? (
-                <code key={si} className="rounded bg-muted px-1 py-0.5 text-[0.92em] font-mono text-[#8c5a2d]">
+                <code key={si} className="rounded bg-muted px-1 py-0.5 text-[0.92em] font-mono text-[#8c5a2d] dark:bg-white/[0.06] dark:text-[#f0b27a]">
                   {seg.replace(/`/g, "")}
                 </code>
               ) : (
@@ -513,16 +508,16 @@ export default function Home() {
         className="w-full"
       />
 
-      <section className="relative mx-2 my-4 sm:mx-4 sm:my-6 overflow-hidden rounded-[2rem] border border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-24 md:mx-8 md:py-32 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
-        <div className="absolute inset-x-0 top-0 h-px bg-black/10" />
-        <div className="absolute inset-x-0 bottom-0 h-px bg-black/10" />
+      <section className="relative mx-2 my-4 sm:mx-4 sm:my-6 overflow-hidden rounded-[2rem] border border-black/10 dark:border-white/10 dot-grid py-24 md:mx-8 md:py-32 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 dark:before:bg-white/10 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 dark:after:bg-white/10 after:content-['']">
+        <div className="absolute inset-x-0 top-0 h-px bg-black/10 dark:bg-white/10" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-black/10 dark:bg-white/10" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="-mt-24 mb-16 flex flex-col items-center justify-between gap-0 md:flex-row md:items-start md:gap-8">
-            <div className="mt-8 max-w-[min(100%,34rem)] rounded-[2rem] md:ml-[clamp(0rem,4vw,3rem)] border border-[#d8b48b]/70 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] p-6 shadow-[0_20px_60px_rgba(60,40,20,0.08)] md:p-10">
+            <div className="mt-8 max-w-[min(100%,34rem)] rounded-[2rem] md:ml-[clamp(0rem,4vw,3rem)] border border-[#d8b48b]/70 dark:border-[#e8a565]/25 cream-surface p-6 shadow-[0_20px_60px_rgba(60,40,20,0.08)] md:p-10">
               <p className="font-['Cormorant_Garamond'] text-4xl leading-none text-[#cf7a2a] md:text-5xl">
                 tldr;
               </p>
-              <div className="mt-6 space-y-6 text-[1.05rem] leading-8 text-slate-600 md:text-[1.1rem]">
+              <div className="mt-6 space-y-6 text-[1.05rem] leading-8 text-slate-600 dark:text-[#cbbfb3] md:text-[1.1rem]">
                 <p>
                   i&apos;m obsessed with shipping features, applications which people actually use {":)"}
                 </p>
@@ -543,7 +538,7 @@ export default function Home() {
             </div>
 
             <div className="order-first mt-10 shrink-0 md:order-none md:mr-[clamp(0rem,4vw,3rem)] md:mt-12 md:self-start lg:mt-16">
-              <div className="rounded-full border border-[#d8b48b]/80 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] p-2 shadow-[0_20px_60px_rgba(60,40,20,0.08)]">
+              <div className="rounded-full border border-[#d8b48b]/80 dark:border-[#e8a565]/30 cream-surface p-2 shadow-[0_20px_60px_rgba(60,40,20,0.08)]">
                 <div
                   className="relative h-36 w-36 overflow-hidden rounded-full border border-white/80 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.92),rgba(246,219,199,0.88)_48%,rgba(215,143,108,0.92))] md:h-48 md:w-48 lg:h-52 lg:w-52"
                   style={{
@@ -560,7 +555,7 @@ export default function Home() {
 
               <div className="mt-5 flex justify-center md:mt-6">
                 <a href="/Onkareshwar_Sharma_Resume.pdf" download>
-                  <OriginButton className="h-12 rounded-full border-[0.5px] border-[#d8b48b]/80 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] px-6 text-base font-medium tracking-[0.12em] shadow-[0_18px_38px_-24px_rgba(60,40,20,0.35)] hover:brightness-105 dark:bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)]">
+                  <OriginButton className="h-12 rounded-full border-[0.5px] border-[#d8b48b]/80 dark:border-[#e8a565]/30 cream-surface px-6 text-base font-medium tracking-[0.12em] shadow-[0_18px_38px_-24px_rgba(60,40,20,0.35)] hover:brightness-105">
                     Resume
                   </OriginButton>
                 </a>
@@ -613,7 +608,7 @@ export default function Home() {
                           aria-pressed={isActive}
                           onClick={() => setSelectedFile({ folderTitle: openFolder.title, project })}
                           className={`min-h-11 max-w-[13rem] shrink-0 truncate rounded-full px-4 text-sm ${
-                            isActive ? "bg-[#0b0d12] text-white" : "glass-inset text-black/70"
+                            isActive ? "bg-[#0b0d12] text-white dark:bg-[#f3e6d8] dark:text-[#1a1512]" : "glass-inset text-black/70 dark:text-white/70"
                           }`}
                         >
                           {project.title}
@@ -625,13 +620,13 @@ export default function Home() {
                 <div key={selectedFile.project.id} role="region" aria-label={selectedFile.project.title} className="flex flex-col gap-5 rounded-[inherit] p-5 *:shrink-0 md:p-8 lg:p-10">
                   <div className="flex flex-col items-start justify-between gap-4 md:flex-row">
                     <div>
-                      <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-black/65">
+                      <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-black/65 dark:text-white/60">
                         {selectedFile.folderTitle}
                       </p>
                       <h3 className="mt-2 text-2xl font-semibold tracking-tight text-foreground md:text-4xl">
                         {selectedFile.project.title}
                       </h3>
-                      <p className="mt-3 text-sm leading-6 text-black/65 md:text-base">
+                      <p className="mt-3 text-sm leading-6 text-black/65 dark:text-white/60 md:text-base">
                         {selectedFile.project.summary}
                       </p>
                     </div>
@@ -643,7 +638,7 @@ export default function Home() {
                           target="_blank"
                           rel="noreferrer"
                           aria-label="Open project repository"
-                          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-[#0b0d12] text-white transition hover:brightness-110"
+                          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 dark:border-white/10 bg-[#0b0d12] text-white dark:bg-[#f3e6d8] dark:text-[#1a1512] transition hover:brightness-110"
                         >
                           <GitHubIcon />
                         </a>
@@ -654,7 +649,7 @@ export default function Home() {
                           href={selectedFile.project.liveUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex shrink-0 items-center justify-center rounded-full border border-[#c98d52]/80 bg-[linear-gradient(180deg,rgba(255,252,248,0.96)_0%,rgba(251,247,241,0.96)_100%)] px-4 py-2 text-[10px] font-medium uppercase tracking-[0.22em] text-[#1f1a17] transition hover:brightness-105"
+                          className="inline-flex shrink-0 items-center justify-center rounded-full border border-[#c98d52]/80 cream-surface px-4 py-2 text-[10px] font-medium uppercase tracking-[0.22em] text-[#1f1a17] dark:text-[#f3ece4] transition hover:brightness-105"
                         >
                           Live
                         </a>
@@ -670,7 +665,7 @@ export default function Home() {
                       {selectedFile.project.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="glass-inset rounded-full px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-black/65"
+                          className="glass-inset rounded-full px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-black/65 dark:text-white/60"
                         >
                           {tag}
                         </span>
@@ -694,37 +689,20 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative mx-2 my-4 sm:mx-4 sm:my-6 overflow-hidden rounded-[2rem] border border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-12 md:mx-8 md:py-24 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
+      <section className="relative mx-2 my-4 sm:mx-4 sm:my-6 overflow-hidden rounded-[2rem] border border-black/10 dark:border-white/10 dot-grid py-12 md:mx-8 md:py-24 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 dark:before:bg-white/10 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 dark:after:bg-white/10 after:content-['']">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="relative md:pl-6">
-            <p className="text-[2.3rem] font-semibold tracking-[-0.06em] text-[#111827] md:text-[4rem]">
+            <p className="text-[2.3rem] font-semibold tracking-[-0.06em] text-[#111827] dark:text-[#f3ece4] md:text-[4rem]">
               github contributions
             </p>
           </div>
 
-          <div className="relative mt-10 overflow-hidden rounded-[1.8rem] border border-white/10 bg-[#0d1117] p-4 text-white shadow-[0_24px_60px_rgba(2,6,23,0.45)] md:p-5">
-            <div className="mb-4 flex items-center justify-between gap-3">
-              <p className="text-[1.1rem] font-medium text-white/90 md:text-[1.5rem]">
-                {githubStats ? `${githubStats.total.toLocaleString()} contributions in the last year` : "Loading contributions..."}
-              </p>
-              <button className="hidden rounded-md border border-white/10 bg-white/5 sm:block px-3 py-1 text-xs font-medium text-white/80 transition hover:bg-white/10">
-                Contribution settings ▾
-              </button>
-            </div>
-
-            <div ref={contributionsRef} className="flex gap-3 overflow-x-auto pb-2">
-              <div className="sticky left-0 z-10 flex flex-col justify-around bg-[#0d1117] pb-2 pr-1 pt-8 text-[10px] font-medium text-white/45">
-                {weekdayLabels.map((day) => (
-                  <span key={day} className="h-4 leading-4">
-                    {day}
-                  </span>
-                ))}
-              </div>
-
-              <div className="min-w-[46rem] flex-1 overflow-hidden rounded-xl border border-white/5 bg-white/2 px-2 py-2">
+          <div className="relative mt-10 rounded-2xl border border-black/10 dark:border-white/10 bg-white p-4 shadow-[0_18px_50px_-30px_rgba(60,40,20,0.35)] dark:border-white/10 dark:bg-[#171310] dark:shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)] md:p-6">
+            <div ref={contributionsRef} className="overflow-x-auto pb-1 [scrollbar-width:thin]">
+              <div className="min-w-[44rem]">
                 <div
-                  className="mb-2 grid h-4 text-[10px] font-medium uppercase tracking-[0.12em] text-white/50"
-                  style={{ gridTemplateColumns: `repeat(${contributionData.grid[0].length}, minmax(0, 1fr))`, gap: "3px" }}
+                  className="mb-2 grid text-[13px] text-[#1f2328] dark:text-[#e8ddd2]"
+                  style={{ gridTemplateColumns: `repeat(${weekCount}, minmax(0, 1fr))`, columnGap: "4px" }}
                 >
                   {contributionData.monthLabels.map((month) => (
                     <span key={`${month.label}-${month.col}`} className="row-start-1 whitespace-nowrap" style={{ gridColumnStart: month.col + 1 }}>
@@ -732,23 +710,20 @@ export default function Home() {
                     </span>
                   ))}
                 </div>
-                <div className="grid" style={{ gridTemplateColumns: `repeat(${contributionData.grid[0].length}, minmax(0, 1fr))`, gap: "3px" }}>
-                  {contributionData.grid.map((row, rowIndex) =>
-                    row.map((level, colIndex) => {
-                      const colors = [
-                        "#161b22",
-                        "#0e4429",
-                        "#006d32",
-                        "#26a641",
-                        "#39d353",
-                      ];
 
+                <div
+                  className="grid grid-flow-col"
+                  style={{ gridTemplateColumns: `repeat(${weekCount}, minmax(0, 1fr))`, gridTemplateRows: "repeat(7, auto)", gap: "4px" }}
+                >
+                  {Array.from({ length: weekCount }, (_, col) =>
+                    contributionData.grid.map((row, rowIndex) => {
+                      const cell = row[col];
                       return (
                         <div
-                          key={`${rowIndex}-${colIndex}`}
-                          className="h-2.5 w-2.5 rounded-[2px] md:h-3 md:w-3"
-                          style={{ backgroundColor: colors[level] ?? colors[0] }}
-                          title={level > 0 ? `${level} contributions` : "No contributions"}
+                          key={`${rowIndex}-${col}`}
+                          className="aspect-square w-full rounded-[3px] md:rounded-[4px]"
+                          style={{ backgroundColor: CONTRIBUTION_COLORS[cell?.level ?? 0] ?? CONTRIBUTION_COLORS[0] }}
+                          title={cell ? `${cell.level > 0 ? "Contributions" : "No contributions"} on ${formatDay(cell.date)}` : undefined}
                         />
                       );
                     }),
@@ -757,35 +732,49 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mt-4 flex items-center justify-between gap-3 text-[11px] text-white/55 md:text-[12px]">
-              <span>Learn how we count contributions</span>
+            <div className="mt-4 flex flex-col gap-3 text-[13px] text-[#59636e] dark:text-[#a89c90] sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-2">
-                <span className="text-white/60">Less</span>
+                <span>Less</span>
                 <div className="flex items-center gap-1">
-                  {[0, 1, 2, 3, 4].map((level) => (
-                    <span
-                      key={level}
-                      className="h-2.5 w-2.5 rounded-sm border border-white/10"
-                      style={{ backgroundColor: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"][level] }}
-                    />
+                  {[1, 2, 3, 4].map((level) => (
+                    <span key={level} className="h-3.5 w-3.5 rounded-[3px]" style={{ backgroundColor: CONTRIBUTION_COLORS[level] }} />
                   ))}
                 </div>
-                <span className="text-white/60">More</span>
+                <span>More</span>
               </div>
+
+              <p>
+                {githubStats ? (
+                  <>
+                    <span className="text-[#b6bec7] dark:text-[#6f655c]">OnkarDsharma</span> contributed{" "}
+                    <span className="font-semibold text-[#2da44e] dark:text-[#39d353]">{githubStats.total.toLocaleString()}</span> in the last year on{" "}
+                    <a
+                      href="https://github.com/OnkarDsharma"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-[#b6bec7] underline underline-offset-4 transition hover:text-[#59636e] dark:text-[#6f655c] dark:hover:text-[#e8ddd2]"
+                    >
+                      GitHub
+                    </a>
+                  </>
+                ) : (
+                  "Loading contributions…"
+                )}
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="relative mx-2 my-4 sm:mx-4 sm:my-6 overflow-hidden rounded-[2rem] border border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] py-12 md:mx-8 md:py-24 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
+      <section className="relative mx-2 my-4 sm:mx-4 sm:my-6 overflow-hidden rounded-[2rem] border border-black/10 dark:border-white/10 dot-grid py-12 md:mx-8 md:py-24 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 dark:before:bg-white/10 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 dark:after:bg-white/10 after:content-['']">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="relative md:pl-6">
-            <p className="text-[2.5rem] font-semibold tracking-[-0.06em] text-[#111827] md:text-[4rem]">
+            <p className="text-[2.5rem] font-semibold tracking-[-0.06em] text-[#111827] dark:text-[#f3ece4] md:text-[4rem]">
               about me
             </p>
           </div>
 
-          <div className="mt-10 max-w-6xl text-[1.05rem] leading-[1.9] text-black/70 md:text-[1.35rem] md:leading-[2.1]">
+          <div className="mt-10 max-w-6xl text-[1.05rem] leading-[1.9] text-black/70 dark:text-white/70 md:text-[1.35rem] md:leading-[2.1]">
             <p>
               i&apos;m a computer science undergrad at IIIT Naya Raipur who just likes building and shipping stuff with a product mindset. i specialize in working with backend, production AI (agents, pipelines, RAG) stuff with the goal of shipping.
             </p>
@@ -799,11 +788,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden border-x border-black/10 bg-[radial-gradient(circle_at_1px_1px,rgba(120,120,120,0.18)_1px,transparent_0)] [background-size:18px_18px] pb-28 pt-8 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 after:content-['']">
+      <section className="relative overflow-hidden border-x border-black/10 dark:border-white/10 dot-grid pb-28 pt-8 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 dark:before:bg-white/10 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 dark:after:bg-white/10 after:content-['']">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="relative border-t border-black/10 pt-6">
-            <div className="flex flex-col items-center justify-center gap-5 pb-6 text-center text-[0.95rem] text-black/60 md:text-[1.1rem]">
-              <p className="max-w-2xl text-[1.1rem] leading-7 text-black/70 md:text-[1.4rem]">
+          <div className="relative border-t border-black/10 dark:border-white/10 pt-6">
+            <div className="flex flex-col items-center justify-center gap-5 pb-6 text-center text-[0.95rem] text-black/60 dark:text-white/55 md:text-[1.1rem]">
+              <p className="max-w-2xl text-[1.1rem] leading-7 text-black/70 dark:text-white/70 md:text-[1.4rem]">
                 built using html, tailwind, next.js.
               </p>
             </div>
@@ -812,7 +801,7 @@ export default function Home() {
       </section>
 
       <footer className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2">
-        <div className="flex items-center gap-3 rounded-full border border-white/10 bg-[#05070b] px-4 py-3 shadow-[0_12px_40px_rgba(0,0,0,0.42)] backdrop-blur-md">
+        <div className="flex items-center gap-3 rounded-full border border-white/10 bg-[#05070b] px-4 py-3 dark:border-[#ffecd6]/12 dark:bg-[#1d1815]/90 shadow-[0_12px_40px_rgba(0,0,0,0.42)] backdrop-blur-md">
           <a
             href="https://www.linkedin.com/in/onkareshwar-sharma-b1a40132a/"
             target="_blank"
@@ -840,6 +829,8 @@ export default function Home() {
           >
             <GitHubIcon />
           </a>
+          <span className="h-6 w-px bg-white/15" aria-hidden="true" />
+          <ThemeToggle className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition hover:bg-white/10 hover:text-white" />
         </div>
       </footer>
     </main>

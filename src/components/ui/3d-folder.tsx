@@ -14,6 +14,14 @@ export interface Project {
   repoUrl?: string;
   highlights: string[];
   tags: string[];
+  prs?: PullRequest[];
+}
+
+export interface PullRequest {
+  number: number;
+  title: string;
+  status: "merged" | "open" | "closed";
+  url: string;
 }
 
 interface AnimatedFolderProps {

@@ -35,6 +35,27 @@ const folderData: { title: string; projects: Project[] }[] = [
     title: "Open Source Contributions",
     projects: [
       {
+        id: "osc-growthbook",
+        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
+        title: "GrowthBook (YCW22)",
+        summary: "Open Source Contribution | TypeScript, Node.js, React, REST API | 5 PRs",
+        details: `
+• Built a new public REST API endpoint (\`POST /experiments/:id/comment\`) enabling programmatic comment posting on experiments, reusing the internal \`addComment\` logic so permissions, validation and data model match the UI exactly.
+• Fixed a Saved Groups bug where searching returned no results from any page other than page 1, by resetting pagination whenever the search filter changes (mirroring the existing sort-toggle behavior).
+• Added a configurable maximum number of goal metrics per experiment, and exposed \`ownerName\` in experiment API responses.
+• Regenerated OpenAPI specs, ran lint, type-check and test suites, and manually tested each change end-to-end against a local dev instance.
+`,
+        highlights: [],
+        tags: ["TypeScript", "REST API", "React", "GrowthBook"],
+        prs: [
+          { number: 7347, title: "feat: add configurable maximum number of goal metrics per experiment", status: "open", url: "https://github.com/growthbook/growthbook/pull/7347" },
+          { number: 6904, title: "fix(saved-groups): reset pagination to page 1 when search filter changes", status: "merged", url: "https://github.com/growthbook/growthbook/pull/6904" },
+          { number: 6526, title: "Add API support for posting experiment comments", status: "merged", url: "https://github.com/growthbook/growthbook/pull/6526" },
+          { number: 6469, title: "Add ownerName to experiment API responses", status: "open", url: "https://github.com/growthbook/growthbook/pull/6469" },
+          { number: 6596, title: "Add namespace info to Start Experiment modal summary", status: "closed", url: "https://github.com/growthbook/growthbook/pull/6596" },
+        ],
+      },
+      {
         id: "osc-5",
         image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80",
         title: "ParadeDB (YCS23): max_expansions for Fuzzy Search",
@@ -61,36 +82,6 @@ const folderData: { title: string; projects: Project[] }[] = [
 `,
         highlights: [],
         tags: ["Python", "GitLab API", "Backend"],
-      },
-      {
-        id: "osc-1",
-        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&q=80",
-        title: "GrowthBook (YCW22): API Support for Posting Experiment Comments",
-        summary: "Open Source Contribution | TypeScript, Node.js, REST API | PR #6526",
-        details: `
-• Built a new public REST API endpoint (\`POST /experiments/:id/comment\`) enabling programmatic comment posting on experiments, previously only possible through the UI.
-• Reused existing internal comment/discussion logic (\`addComment\`) to ensure identical permission checks, data model, and validation as the UI's native comment feature, avoiding duplicated business logic.
-• Added clear, structured error handling for invalid input (empty comments) and nonexistent experiment IDs, returning descriptive errors instead of crashes.
-• Regenerated the OpenAPI spec and verified linting, type-checking, and formatting checks passed; manually tested end-to-end against a local dev instance with valid, invalid, and edge-case requests.
-• Scoped the PR precisely to the API layer, deferring related MCP tool support to a focused follow-up PR since GrowthBook's MCP server lives in a separate repository.
-`,
-        highlights: [],
-        tags: ["REST API", "Backend", "GrowthBook"],
-      },
-      {
-        id: "osc-2",
-        image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
-        title: "GrowthBook (YCW22): Fix Pagination Bug in Saved Groups Search",
-        summary: "Open Source Contribution | TypeScript, React | PR #6904",
-        details: `
-• Diagnosed and fixed a bug in Saved Groups' ID List page where searching returned no results if the user was on any page other than page 1.
-• Root-caused it to \`currentPage\` never resetting when the search filter changed, so a correctly-filtered array got sliced at a stale offset, silently returning empty results despite matching items existing.
-• Fixed by resetting pagination to page 1 on every search input change, mirroring the reset behavior already used by the existing sort-order toggle for consistency.
-• Verified the fix locally with a 200-item test list, confirming search now correctly finds matches from any starting page, while unaffected features (single-page search, sort toggle) remained unbroken.
-• Ran the full lint, type-check, and test suite, confirming pre-existing unrelated test failures were present on unmodified \`main\` and not introduced by this change.
-`,
-        highlights: [],
-        tags: ["Pagination", "Search", "Frontend"],
       },
       {
         id: "osc-3",
@@ -613,6 +604,40 @@ export default function Home() {
                       {formatProjectDetails(selectedFile.project.details)}
                     </div>
                   </div>
+
+                  {selectedFile.project.prs?.length ? (
+                    <div className="flex flex-col gap-3">
+                      <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-black/65">
+                        Pull Requests
+                      </p>
+                      <ul className="grid gap-3 sm:grid-cols-2">
+                        {selectedFile.project.prs.map((pr) => (
+                          <li key={pr.number}>
+                            <a
+                              href={pr.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="glass-inset relative flex h-full flex-col gap-2 rounded-2xl p-4 pr-24 transition hover:brightness-105"
+                            >
+                              <span
+                                className={`absolute right-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] ${
+                                  pr.status === "merged"
+                                    ? "bg-[#8250df] text-white"
+                                    : pr.status === "open"
+                                      ? "bg-[#1f883d] text-white"
+                                      : "bg-[#cf222e] text-white"
+                                }`}
+                              >
+                                {pr.status === "merged" ? "Merged" : pr.status === "open" ? "Open" : "Closed"}
+                              </span>
+                              <span className="text-xs font-medium text-black/55">#{pr.number}</span>
+                              <span className="text-sm font-medium leading-6 text-foreground">{pr.title}</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
 
                 </div>
                 </>

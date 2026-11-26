@@ -698,16 +698,12 @@ export default function Home() {
           </div>
 
           <div className="relative mt-10 rounded-2xl border border-white/10 bg-[#0d1117] p-4 shadow-[0_24px_60px_rgba(2,6,23,0.45)] md:p-6">
-            <div className="mb-5 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b border-white/10 pb-5 md:mb-6 md:pb-6">
-              <p className="flex items-baseline gap-3">
-                <span className="text-5xl font-semibold leading-none tracking-tight text-[#39d353] [text-shadow:0_0_28px_rgba(57,211,83,0.35)] tabular-nums md:text-6xl">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-white/10 pb-4">
+              <p className="flex items-baseline gap-2">
+                <span className="text-2xl font-semibold leading-none tracking-tight text-[#39d353] [text-shadow:0_0_14px_rgba(57,211,83,0.25)] tabular-nums md:text-3xl">
                   {githubStats ? githubStats.total.toLocaleString() : "—"}
                 </span>
-                <span className="text-sm leading-snug text-white/70 md:text-base">
-                  contributions
-                  <br />
-                  in the last year
-                </span>
+                <span className="text-sm text-white/70">contributions in the last year</span>
               </p>
               <a
                 href="https://github.com/OnkarDsharma"

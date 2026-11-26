@@ -698,6 +698,28 @@ export default function Home() {
           </div>
 
           <div className="relative mt-10 rounded-2xl border border-white/10 bg-[#0d1117] p-4 shadow-[0_24px_60px_rgba(2,6,23,0.45)] md:p-6">
+            <div className="mb-5 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b border-white/10 pb-5 md:mb-6 md:pb-6">
+              <p className="flex items-baseline gap-3">
+                <span className="text-5xl font-semibold leading-none tracking-tight text-[#39d353] [text-shadow:0_0_28px_rgba(57,211,83,0.35)] tabular-nums md:text-6xl">
+                  {githubStats ? githubStats.total.toLocaleString() : "—"}
+                </span>
+                <span className="text-sm leading-snug text-white/70 md:text-base">
+                  contributions
+                  <br />
+                  in the last year
+                </span>
+              </p>
+              <a
+                href="https://github.com/OnkarDsharma"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[13px] text-white/70 transition hover:bg-white/10 hover:text-white"
+              >
+                <GitHubIcon />
+                @OnkarDsharma
+              </a>
+            </div>
+
             <div ref={contributionsRef} className="overflow-x-auto pb-1 [scrollbar-width:thin]">
               <div className="min-w-[44rem]">
                 <div
@@ -743,24 +765,7 @@ export default function Home() {
                 <span>More</span>
               </div>
 
-              <p>
-                {githubStats ? (
-                  <>
-                    <span className="text-white/40">OnkarDsharma</span> contributed{" "}
-                    <span className="font-semibold text-[#39d353]">{githubStats.total.toLocaleString()}</span> in the last year on{" "}
-                    <a
-                      href="https://github.com/OnkarDsharma"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-white/40 underline underline-offset-4 transition hover:text-white/80"
-                    >
-                      GitHub
-                    </a>
-                  </>
-                ) : (
-                  "Loading contributions…"
-                )}
-              </p>
+              <p className="text-white/40">{githubStats ? "Updated live from GitHub" : "Loading contributions…"}</p>
             </div>
           </div>
         </div>

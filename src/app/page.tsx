@@ -32,6 +32,15 @@ function XIcon() {
   );
 }
 
+function MailIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m3 7 9 6 9-6" />
+    </svg>
+  );
+}
+
 const folderData: { title: string; projects: Project[] }[] = [
   {
     title: "Open Source Contributions",
@@ -700,7 +709,7 @@ export default function Home() {
           <div className="relative mt-10 rounded-2xl border border-white/10 bg-[#0d1117] p-4 shadow-[0_24px_60px_rgba(2,6,23,0.45)] md:p-6">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-white/10 pb-4">
               <p className="flex items-baseline gap-2">
-                <span className="text-2xl font-semibold leading-none tracking-tight text-[#39d353] [text-shadow:0_0_14px_rgba(57,211,83,0.25)] tabular-nums md:text-3xl">
+                <span className="text-xl font-semibold leading-none tracking-tight text-[#39d353] [text-shadow:0_0_12px_rgba(57,211,83,0.22)] tabular-nums md:text-2xl">
                   {githubStats ? githubStats.total.toLocaleString() : "—"}
                 </span>
                 <span className="text-sm text-white/70">contributions in the last year</span>
@@ -829,6 +838,14 @@ export default function Home() {
             className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition hover:bg-white/10 hover:text-white"
           >
             <GitHubIcon />
+          </a>
+          <a
+            href="mailto:onkareshwarsharma7om@gmail.com"
+            aria-label="Email onkareshwarsharma7om@gmail.com"
+            title="onkareshwarsharma7om@gmail.com"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition hover:bg-white/10 hover:text-white"
+          >
+            <MailIcon />
           </a>
           <span className="h-6 w-px bg-white/15" aria-hidden="true" />
           <ThemeToggle className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition hover:bg-white/10 hover:text-white" />

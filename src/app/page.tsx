@@ -180,12 +180,21 @@ const folderData: { title: string; projects: Project[] }[] = [
         title: "BigBrick Technologies: Backend Developer Intern",
         summary: "BigBrick Technologies Private Limited | Remote | Oct 2026 – Present",
         details: `
-• Engineered TenderHub, a government procurement intelligence platform on Node.js, Express.js and MongoDB, with REST APIs and 4 core data models for tenders, contractors, AI dossiers and Copilot sessions.
-• Automated daily tender ingestion across 2 government procurement portals using Playwright/Puppeteer and PDF parsing to extract bid metadata and technical specifications; integrated Cloudflare R2 and Redis for document storage, caching, and rate limiting.
-• Built a 3-stage AI analysis pipeline (Gemini, GPT-4o mini fallback, deterministic rules) across 5 tender domains, generating BOQ estimates, compliance checks and eligibility assessments in under 60 seconds.
+• Built TenderHub, a government procurement intelligence platform for contractors, on Node.js (Express 5), MongoDB (Mongoose) and Redis, with a React 19 + Vite frontend and a separate admin console.
+• Multi-portal scraping: wrote Playwright adapters for 7 NIC eProcurement portals (Jammu & Kashmir, Punjab, Himachal Pradesh, Ladakh, Haryana, Delhi, PMGSY rural roads) plus the GeM marketplace, all behind one \`TenderSourceAdapter\` interface, and made the J&K crawl twice as fast.
+• Captcha solving: portal captchas go through a chain of solvers: a Hugging Face vision model, then a local Tesseract OCR step (Sharp strips the noise dots, binarizes and upscales the image, ~280 ms, no API cost), then Gemini Vision as a last fallback, with up to 10 retries.
+• Reliable crawling: full crawls save a checkpoint (department, page, last tender) and resume after interruption; daily crawls stop after 5 already-seen tenders in a row, and a unique \`{ sourcePortal, sourceTenderId }\` index keeps the database free of duplicates.
+• Scheduling: GitHub Actions runs a matrix job per state in 6 daily slots, with Playwright caching, a duplicate-run guard and failure-log uploads; two nightly jobs track tender status, and a reconciliation service flags tenders that departments cancelled or withdrew.
+• Document pipeline: NIT PDFs and BOQ archives are compressed with Ghostscript and stored in Cloudflare R2 under \`{dept}/{tenderId}_{date}/{file}\` keys, mirrored to a backup bucket in a second Cloudflare account; a retry queue re-fetches missing documents.
+• AI tender analysis: collects a tender's NIT, BOQ spreadsheet and work-item files, turns text PDFs into text and sends scanned ones to Gemini as files, then produces a pre-bid dossier with BOQ estimates, eligibility, compliance checks and milestones in under 60 seconds.
+• Multi-LLM layer: one provider interface over Gemini, DeepSeek, Claude and any OpenAI-compatible API, with a shared JSON-repair parser, per-run token and cost tracking, and an admin page that runs the same tender on several models side by side.
+• Contractor tools: a contractor-fit check compares a company profile only against thresholds the tender documents actually state, a bid-capacity score implements the CPWD / J&K PWD formula (A × N × 2 − B), and a Copilot chat answers questions about a tender, with per-user credits.
+• Alerts and payments: a matching engine checks new tenders against each contractor's saved filters and queues WhatsApp alerts through BullMQ; Razorpay checkout verifies payments both in the browser callback and in a signed server webhook.
+• Security and SEO: email OTP and Google OAuth sign-in with JWT cookies, role-based access, Redis rate limits and a bot shield with honeypots and IP blocklists; dynamic sitemaps, IndexNow pings and server-rendered pages for search crawlers so tender pages get indexed.
+• Covered the system with 20+ backend test suites (adapter parity, GeM PDF parsing, tender search indexes, dossier credits, abuse limits, SEO) and added structured Pino logging plus live crawl telemetry to the admin dashboard.
 `,
         highlights: [],
-        tags: ["Node.js", "Express.js", "MongoDB", "Redis", "AI Pipeline"],
+        tags: ["Node.js", "Express.js", "MongoDB", "Redis", "Playwright", "Cloudflare R2", "BullMQ", "LLMs"],
       },
     ],
   },

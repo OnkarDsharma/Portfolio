@@ -6,6 +6,7 @@ import SakuraEditorialPoster from "@/components/ui/sakura-editorial-poster";
 import { AnimatedFolder, type Project } from "@/components/ui/3d-folder";
 import { OriginButton } from "@/components/ui/origin-button";
 import { PrCarousel } from "@/components/ui/pr-carousel";
+import { AnimatedDock } from "@/components/ui/animated-dock";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 function GitHubIcon() {
@@ -811,45 +812,26 @@ export default function Home() {
       </section>
 
       <footer className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2">
-        <div className="flex items-center gap-3 rounded-full border border-white/10 bg-[#05070b] px-4 py-3 dark:border-[#ffecd6]/12 dark:bg-[#1d1815]/90 shadow-[0_12px_40px_rgba(0,0,0,0.42)] backdrop-blur-md">
-          <a
-            href="https://www.linkedin.com/in/onkareshwar-sharma-b1a40132a/"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="LinkedIn"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition hover:bg-white/10 hover:text-white"
-          >
-            <LinkedInIcon />
-          </a>
-          <a
-            href="https://x.com/HououinKyo1225"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="X"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition hover:bg-white/10 hover:text-white"
-          >
-            <XIcon />
-          </a>
-          <a
-            href="https://github.com/OnkarDsharma"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition hover:bg-white/10 hover:text-white"
-          >
-            <GitHubIcon />
-          </a>
-          <a
-            href="mailto:onkareshwarsharma7om@gmail.com"
-            aria-label="Email onkareshwarsharma7om@gmail.com"
-            title="onkareshwarsharma7om@gmail.com"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition hover:bg-white/10 hover:text-white"
-          >
-            <MailIcon />
-          </a>
-          <span className="h-6 w-px bg-white/15" aria-hidden="true" />
-          <ThemeToggle className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/80 transition hover:bg-white/10 hover:text-white" />
-        </div>
+        <AnimatedDock
+          items={[
+            { label: "LinkedIn", link: "https://www.linkedin.com/in/onkareshwar-sharma-b1a40132a/", target: "_blank", Icon: <LinkedInIcon /> },
+            { label: "X", link: "https://x.com/HououinKyo1225", target: "_blank", Icon: <XIcon /> },
+            { label: "GitHub", link: "https://github.com/OnkarDsharma", target: "_blank", Icon: <GitHubIcon /> },
+            {
+              label: "Email onkareshwarsharma7om@gmail.com",
+              title: "onkareshwarsharma7om@gmail.com",
+              link: "mailto:onkareshwarsharma7om@gmail.com",
+              Icon: <MailIcon />,
+            },
+            {
+              label: "Toggle dark mode",
+              dividerBefore: true,
+              element: (
+                <ThemeToggle className="flex h-full w-full cursor-pointer items-center justify-center rounded-full text-white/80 transition-colors hover:text-white" />
+              ),
+            },
+          ]}
+        />
       </footer>
     </main>
   );

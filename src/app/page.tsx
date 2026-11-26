@@ -588,7 +588,7 @@ export default function Home() {
             />
             <div
               className={`glass overflow-hidden rounded-[1.5rem] transition-all duration-500 md:rounded-[2rem] ${
-                selectedFile ? "max-h-[4000px] md:max-h-[min(80vh,880px)]" : "max-h-0"
+                selectedFile ? "max-h-[6000px]" : "max-h-0"
               }`}
               style={{
                 opacity: selectedFile ? 1 : 0,
@@ -619,7 +619,7 @@ export default function Home() {
                     })}
                   </div>
                 ) : null}
-                <div key={selectedFile.project.id} tabIndex={0} role="region" aria-label={selectedFile.project.title} className="flex flex-col gap-5 rounded-[inherit] p-5 md:max-h-[min(80vh,880px)] md:overflow-y-auto *:shrink-0 md:p-8 lg:p-10">
+                <div key={selectedFile.project.id} role="region" aria-label={selectedFile.project.title} className="flex flex-col gap-5 rounded-[inherit] p-5 *:shrink-0 md:p-8 lg:p-10">
                   <div className="flex flex-col items-start justify-between gap-4 md:flex-row">
                     <div>
                       <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-black/65">

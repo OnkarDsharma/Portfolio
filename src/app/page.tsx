@@ -299,8 +299,8 @@ type GitHubContributionResponse = {
 
 type ContributionCell = { level: number; date: string } | null;
 
-// Level 0 (no contributions) is left empty, like the reference design; 1–4 go dark → bright green.
-const CONTRIBUTION_COLORS = ["transparent", "#0e4429", "#006d32", "#26a641", "#39d353"];
+// GitHub's dark palette: level 0 is an empty grey square, 1–4 go dark → bright green.
+const CONTRIBUTION_COLORS = ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"];
 
 const formatDay = (date: string) =>
   new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }).format(new Date(date));
@@ -697,11 +697,11 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="relative mt-10 rounded-2xl border border-black/10 dark:border-white/10 bg-white p-4 shadow-[0_18px_50px_-30px_rgba(60,40,20,0.35)] dark:border-white/10 dark:bg-[#171310] dark:shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)] md:p-6">
+          <div className="relative mt-10 rounded-2xl border border-white/10 bg-[#0d1117] p-4 shadow-[0_24px_60px_rgba(2,6,23,0.45)] md:p-6">
             <div ref={contributionsRef} className="overflow-x-auto pb-1 [scrollbar-width:thin]">
               <div className="min-w-[44rem]">
                 <div
-                  className="mb-2 grid text-[13px] text-[#1f2328] dark:text-[#e8ddd2]"
+                  className="mb-2 grid text-[13px] text-white/75"
                   style={{ gridTemplateColumns: `repeat(${weekCount}, minmax(0, 1fr))`, columnGap: "4px" }}
                 >
                   {contributionData.monthLabels.map((month) => (
@@ -732,11 +732,11 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mt-4 flex flex-col gap-3 text-[13px] text-[#59636e] dark:text-[#a89c90] sm:flex-row sm:items-center sm:justify-between">
+            <div className="mt-4 flex flex-col gap-3 text-[13px] text-white/55 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-2">
                 <span>Less</span>
                 <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4].map((level) => (
+                  {[0, 1, 2, 3, 4].map((level) => (
                     <span key={level} className="h-3.5 w-3.5 rounded-[3px]" style={{ backgroundColor: CONTRIBUTION_COLORS[level] }} />
                   ))}
                 </div>
@@ -746,13 +746,13 @@ export default function Home() {
               <p>
                 {githubStats ? (
                   <>
-                    <span className="text-[#b6bec7] dark:text-[#6f655c]">OnkarDsharma</span> contributed{" "}
-                    <span className="font-semibold text-[#2da44e] dark:text-[#39d353]">{githubStats.total.toLocaleString()}</span> in the last year on{" "}
+                    <span className="text-white/40">OnkarDsharma</span> contributed{" "}
+                    <span className="font-semibold text-[#39d353]">{githubStats.total.toLocaleString()}</span> in the last year on{" "}
                     <a
                       href="https://github.com/OnkarDsharma"
                       target="_blank"
                       rel="noreferrer"
-                      className="text-[#b6bec7] underline underline-offset-4 transition hover:text-[#59636e] dark:text-[#6f655c] dark:hover:text-[#e8ddd2]"
+                      className="text-white/40 underline underline-offset-4 transition hover:text-white/80"
                     >
                       GitHub
                     </a>

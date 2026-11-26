@@ -518,7 +518,7 @@ export default function Home() {
         className="w-full"
       />
 
-      <section className="relative mx-2 my-4 sm:mx-4 sm:my-6 overflow-hidden rounded-[2rem] border border-black/10 dark:border-white/10 dot-grid py-24 md:mx-8 md:py-32 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 dark:before:bg-white/10 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 dark:after:bg-white/10 after:content-['']">
+      <section className="relative mx-2 my-4 sm:mx-4 sm:my-6 overflow-hidden rounded-[2rem] border border-black/10 dark:border-white/10 dot-grid py-12 md:mx-8 md:py-16 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 dark:before:bg-white/10 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 dark:after:bg-white/10 after:content-['']">
         <div className="absolute inset-x-0 top-0 h-px bg-black/10 dark:bg-white/10" />
         <div className="absolute inset-x-0 bottom-0 h-px bg-black/10 dark:bg-white/10" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -588,7 +588,7 @@ export default function Home() {
             ))}
           </div>
 
-          <div ref={panelRef} className="relative isolate mt-6 scroll-mt-4 md:mt-12">
+          <div ref={panelRef} className={`relative isolate scroll-mt-4 transition-[margin] duration-500 ${selectedFile ? "mt-6 md:mt-12" : "mt-0"}`}>
             <div
               className="glass-backdrop transition-opacity duration-500"
               style={{ opacity: selectedFile ? 1 : 0 }}
@@ -699,7 +699,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative mx-2 my-4 sm:mx-4 sm:my-6 overflow-hidden rounded-[2rem] border border-black/10 dark:border-white/10 dot-grid py-12 md:mx-8 md:py-24 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 dark:before:bg-white/10 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 dark:after:bg-white/10 after:content-['']">
+      <section className="relative mx-2 my-4 sm:mx-4 sm:my-6 overflow-hidden rounded-[2rem] border border-black/10 dark:border-white/10 dot-grid py-10 md:mx-8 md:py-16 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 dark:before:bg-white/10 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 dark:after:bg-white/10 after:content-['']">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="relative md:pl-6">
             <p className="text-[2.3rem] font-semibold tracking-[-0.06em] text-[#111827] dark:text-[#f3ece4] md:text-[4rem]">
@@ -777,7 +777,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative mx-2 my-4 sm:mx-4 sm:my-6 overflow-hidden rounded-[2rem] border border-black/10 dark:border-white/10 dot-grid py-12 md:mx-8 md:py-24 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 dark:before:bg-white/10 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 dark:after:bg-white/10 after:content-['']">
+      <section className="relative mx-2 my-4 sm:mx-4 sm:my-6 overflow-hidden rounded-[2rem] border border-black/10 dark:border-white/10 dot-grid py-10 md:mx-8 md:py-16 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-black/15 dark:before:bg-white/10 before:content-[''] after:absolute after:inset-y-0 after:right-0 after:w-px after:bg-black/15 dark:after:bg-white/10 after:content-['']">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="relative md:pl-6">
             <p className="text-[2.5rem] font-semibold tracking-[-0.06em] text-[#111827] dark:text-[#f3ece4] md:text-[4rem]">

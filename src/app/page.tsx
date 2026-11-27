@@ -710,7 +710,7 @@ export default function Home() {
           <div className="relative mt-10 rounded-2xl border border-white/10 bg-[#0d1117] p-4 shadow-[0_24px_60px_rgba(2,6,23,0.45)] md:p-6">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-white/10 pb-4">
               <p className="flex items-baseline gap-2">
-                <span className="text-lg font-semibold leading-none tracking-tight text-[#39d353] [text-shadow:0_0_10px_rgba(57,211,83,0.2)] tabular-nums md:text-xl">
+                <span className="text-base font-semibold leading-none tracking-tight text-[#39d353] [text-shadow:0_0_8px_rgba(57,211,83,0.18)] tabular-nums md:text-lg">
                   {githubStats ? githubStats.total.toLocaleString() : "—"}
                 </span>
                 <span className="text-sm text-white/70">contributions in the last year</span>
